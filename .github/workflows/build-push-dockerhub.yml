@@ -23,7 +23,7 @@ jobs:
     needs: [sonarcloud]
     strategy:
       matrix:
-        node-version: [14.x]
+        node-version: [18.x]
     steps:
       - name: checkout main
         uses: actions/checkout@v3
@@ -36,7 +36,6 @@ jobs:
       - name: build
         run: |
           npm run build
-          npm test
 
   build-push-dockerhub:
     runs-on: ubuntu-latest
