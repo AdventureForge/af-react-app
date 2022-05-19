@@ -1,6 +1,7 @@
 # Adventure Forge React App
 
 ## CI/CD
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=AdventureForge_af-react-app&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=AdventureForge_af-react-app)
 [![Build and deploy Dockerhub](https://github.com/AdventureForge/af-react-app/actions/workflows/build-push-dockerhub.yml/badge.svg)](https://github.com/AdventureForge/af-react-app/actions/workflows/build-push-dockerhub.yml)
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
