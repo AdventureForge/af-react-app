@@ -4,13 +4,15 @@ import MainHeader from '../components/layout/MainHeader';
 import tavern from '../assets/images/tavern.jpg';
 import Button from '../components/ui/Button';
 import Card from '../components/ui/Card';
+import MainFooter from '../components/layout/MainFooter';
+import Section from '../components/layout/Section';
 
 const Home = () => {
   const imageRef = useRef<HTMLImageElement>(null);
   return (
     <>
       <MainHeader />
-      <section className="px-40 py-5">
+      <Section>
         <div className="flex flex-row">
           <div className="relative w-1/2 h-96">
             <img
@@ -30,8 +32,8 @@ const Home = () => {
             <Button value="Discover" classes="mt-10" />
           </div>
         </div>
-      </section>
-      <section className="px-40 py-5">
+      </Section>
+      <Section>
         <div className="flex h-96">
           <Card classes="w-1/3">
             <img src="" alt="" />
@@ -46,7 +48,8 @@ const Home = () => {
             <p>test 3</p>
           </Card>
         </div>
-      </section>
+      </Section>
+      <MainFooter />
     </>
   );
 };
