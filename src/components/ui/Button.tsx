@@ -12,23 +12,21 @@ type Props = {
 };
 
 const Button: React.FC<Props> = (props) => {
-  const classes = `block border-2 rounded-full font-semibold 
-  ${
+  const defaultClasses = `block border-2 rounded-full font-semibold py-2 px-8 cursor-pointer text-base border-violet-500 active:bg-violet-900 active:scale-105 transition ease-in-out`;
+  const shapeClasses =
     props?.style === 'outline'
       ? 'transparent text-violet-500 hover:bg-violet-800 hover:text-white'
-      : 'bg-violet-500 text-white hover:bg-violet-800'
-  } 
-  py-2 px-8 cursor-pointer text-base border-violet-500 
-  active:bg-violet-900 active:scale-105 transition ease-in-out`;
+      : 'bg-violet-500 text-white hover:bg-violet-800';
 
   return (
     <Link to="/">
       <button
         type={props.type || 'button'}
-        className={`${classes} ${props.classes}`}
+        className={`${defaultClasses} ${shapeClasses} ${props.classes}`}
         disabled={props.disabled ?? false}
+        onClick={props.onClick}
       >
-        {props.value}
+        {props.children} {props.value}
       </button>
     </Link>
   );

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useKeycloak } from '@react-keycloak/web';
 import { useLocation, Navigate, Outlet } from 'react-router-dom';
 
 type Props = {
@@ -6,31 +6,34 @@ type Props = {
 };
 
 const ProtectedRoute: React.FC<Props> = ({ allowedRoles }) => {
-  const [isAllowed, setIsAllowed] = useState(true);
-  const [isRolesVerified, setIsRolesVerified] = useState(false);
-  const auth = { roles: ['user'], user: 'toto' };
+  const { keycloak, initialized } = useKeycloak();
+  const isLoggedIn = keycloak.authenticated;
   const location = useLocation();
 
-  useEffect(() => {
-    const roles = auth.roles.find((role) => allowedRoles.includes(role));
-    const rolesAllowed: boolean = roles ? true : false;
-    setIsAllowed(rolesAllowed);
-    setIsRolesVerified(true);
-  }, []);
+  const isAuthorized = (roles: string[]) => {
+    if (initialized && roles) {
+      return roles.some((role) => {
+        const realm = keycloak.hasRealmRole(role);
+        const resource = keycloak.hasResourceRole(role);
+        return realm || resource;
+      });
+    }
+    return false;
+  };
 
   const evaluateReponse = () => {
-    if (isRolesVerified) {
+    if (initialized) {
       return (
         <>
-          {isAllowed && <Outlet />}
-          {!isAllowed && auth?.user && (
+          {!isLoggedIn && keycloak.login()}
+          {isAuthorized(allowedRoles) && <Outlet />}
+          {!isAuthorized(allowedRoles) && (
             <Navigate to="/unauthorized" state={{ from: location }} replace />
-          )}
-          {!isAllowed && !auth.user && (
-            <Navigate to="/login" state={{ from: location }} replace />
           )}
         </>
       );
+    } else {
+      <p>Loading</p>;
     }
   };
 

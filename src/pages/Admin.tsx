@@ -1,9 +1,14 @@
+import MainHeader from '../components/layout/MainHeader';
+
 const Admin = () => {
   return (
-    <section>
-      <h1>Admin</h1>
-      <p>soon</p>
-    </section>
+    <>
+      <MainHeader />
+      <section>
+        <h1>Admin</h1>
+        <p>soon</p>
+      </section>
+    </>
   );
 };
 

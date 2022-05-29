@@ -1,23 +1,19 @@
-import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import ProtectedRoute from './components/ProtectedRoute';
 import Admin from './pages/Admin';
 import Home from './pages/Home';
-import Login from './pages/Login';
 import NotFound from './pages/NotFound';
 import Unauthorized from './pages/Unauthorized';
 import UserAccount from './pages/UserAccount';
 
 const App = () => {
-  const allowedRolesUser = ['user'];
-  const allowedRolesAdmin = ['Admin'];
+  const allowedRolesUser = ['USER'];
+  const allowedRolesAdmin = ['ADMIN'];
   return (
     <div className="bg-slate-900 min-h-screen">
       <Routes>
         {/* PUBLIC ROUTES */}
         <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/unauthorized" element={<Unauthorized />} />
 
         {/* PRIVATE ROUTES */}
         <Route element={<ProtectedRoute allowedRoles={allowedRolesUser} />}>
@@ -28,6 +24,7 @@ const App = () => {
         </Route>
 
         {/* Not found */}
+        <Route path="/unauthorized" element={<Unauthorized />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </div>
