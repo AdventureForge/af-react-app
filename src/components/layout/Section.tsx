@@ -1,9 +1,10 @@
 type Props = {
   children?: React.ReactNode;
+  className?: string;
 };
 
 const Section: React.FC<Props> = (props) => {
-  return <section className="px-40 py-14">{props.children}</section>;
+  return <section className={`${props.className}`}>{props.children}</section>;
 };
 
 export default Section;

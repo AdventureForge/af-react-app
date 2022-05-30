@@ -1,18 +1,15 @@
 import { useRef } from 'react';
 
-import MainHeader from '../components/layout/MainHeader';
 import tavern from '../assets/images/tavern.jpg';
 import Button from '../components/ui/Button';
 import Card from '../components/ui/Card';
-import MainFooter from '../components/layout/MainFooter';
 import Section from '../components/layout/Section';
 
 const Home = () => {
   const imageRef = useRef<HTMLImageElement>(null);
   return (
     <>
-      <MainHeader />
-      <Section>
+      <Section className="px-40 py-24">
         <div className="flex flex-row">
           <div className="relative w-1/2 h-96">
             <img
@@ -33,7 +30,7 @@ const Home = () => {
           </div>
         </div>
       </Section>
-      <Section>
+      <Section className="px-40 py-24">
         <div className="flex h-96">
           <Card classes="w-1/3">
             <img src="" alt="" />
@@ -49,7 +46,6 @@ const Home = () => {
           </Card>
         </div>
       </Section>
-      <MainFooter />
     </>
   );
 };

@@ -24,11 +24,11 @@ const MainHeader = () => {
   };
 
   return (
-    <header className="flex items-center place-content-between py-5 px-10 mb-10">
+    <header className="flex items-center place-content-between py-5 px-10 z-50 bg-slate-900">
       <div>
         <img src="" alt="" />
         <h1
-          className="text-2xl font-bold text-white"
+          className="text-2xl font-bold text-white cursor-pointer"
           onClick={() => navigate('/')}
         >
           Adventure Forge
