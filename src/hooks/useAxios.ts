@@ -10,7 +10,7 @@ const useAxios = () => {
   const kcToken = keycloak?.token ?? '';
 
   useEffect(() => {
-    const baseURL = window._env_.API_URL;
+    const baseURL = 'http://localhost:8890';
     axiosInstance.current = axios.create({
       baseURL,
       headers: {
