@@ -62,7 +62,7 @@ const Admin = () => {
   return (
     <div className="grid grid-cols-5 h-full">
       <SideNavBar items={items} onClick={onNavItemClick} />
-      <Section className="col-span-4 py-5">
+      <Section className="col-span-4 py-6">
         <h1 className="text-white text-3xl font-semibold block border-l-[40px] pl-5 border-l-cyan-500">
           {pageContent.value}
         </h1>
