@@ -44,7 +44,7 @@ const TextArea = <T extends unknown>({
     { 'border-red-400': errors }
   );
   return (
-    <div className="mt-6 w-2/3">
+    <div className="mt-6">
       <label className="block text-lg mb-1 pl-5 capitalize">{label}</label>
       <textarea
         placeholder={placeholder}

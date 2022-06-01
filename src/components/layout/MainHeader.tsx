@@ -1,7 +1,7 @@
 import { useKeycloak } from '@react-keycloak/web';
 import { useNavigate } from 'react-router-dom';
 import { UserCircleIcon } from '@heroicons/react/outline';
-import Button from '../ui/Button';
+import ButtonLink from '../ui/ButtonLink';
 
 const MainHeader = () => {
   const { keycloak, initialized } = useKeycloak();
@@ -24,7 +24,7 @@ const MainHeader = () => {
   };
 
   return (
-    <header className="flex items-center place-content-between py-5 px-10 z-50 bg-slate-900">
+    <header className="flex items-center place-content-between py-5 px-10 z-10 bg-slate-900">
       <div>
         <img src="" alt="" />
         <h1
@@ -36,20 +36,20 @@ const MainHeader = () => {
       </div>
       {initialized && !keycloak.authenticated && (
         <div className="flex">
-          <Button value="Login" classes="mr-4" onClick={loginHandler} />
-          <Button value="Sign up" style="outline" onClick={signUpHandler} />
+          <ButtonLink value="Login" className="mr-4" onClick={loginHandler} />
+          <ButtonLink value="Sign up" style="outline" onClick={signUpHandler} />
         </div>
       )}
       {initialized && keycloak.authenticated && (
         <div className="flex">
-          <Button
+          <ButtonLink
             value={keycloak?.tokenParsed?.preferred_username}
-            classes="mr-4"
+            className="mr-4"
             onClick={profileHandler}
           >
             <UserCircleIcon className="w-5 inline-block" />
-          </Button>
-          <Button value="Logout" style="outline" onClick={logoutHandler} />
+          </ButtonLink>
+          <ButtonLink value="Logout" style="outline" onClick={logoutHandler} />
         </div>
       )}
     </header>

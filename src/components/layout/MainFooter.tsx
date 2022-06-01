@@ -2,13 +2,13 @@ import { useKeycloak } from '@react-keycloak/web';
 import { Link } from 'react-router-dom';
 import GitHubIcon from '../../assets/svg/GitHubIcon';
 import LinkedinIcon from '../../assets/svg/LinkedinIcon';
-import Button from '../ui/Button';
+import ButtonLink from '../ui/ButtonLink';
 import CircleIcon from '../ui/CircleIcon';
 
 const MainFooter = () => {
   const { keycloak, initialized } = useKeycloak();
   return (
-    <footer className="text-center bg-zinc-900 text-white z-50 relative">
+    <footer className="text-center bg-zinc-900 text-white z-10 relative">
       <div className="container px-6 pt-6">
         <div className="flex justify-center mb-6">
           <CircleIcon link="https://www.linkedin.com/in/morgan-lombard-37502976/">
@@ -50,7 +50,7 @@ const MainFooter = () => {
               </div>
 
               <div className="md:mr-auto mb-6">
-                <Button value="subscribe" style="outline" />
+                <ButtonLink value="subscribe" style="outline" />
               </div>
             </div>
           </form>

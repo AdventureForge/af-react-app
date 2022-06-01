@@ -6,16 +6,16 @@ export enum Category {
   ATLAS = 'Atlas',
 }
 
-export type Publisher = {
+export interface Publisher {
   uuid?: string;
-  name: string;
+  name?: string;
   websiteUrl?: string;
   description?: string;
   logo?: string;
   collections?: Collection[];
-};
+}
 
-export type RolePlayingGame = {
+export interface RolePlayingGame {
   uuid?: string;
   title: string;
   subtitle?: string;
@@ -23,26 +23,26 @@ export type RolePlayingGame = {
   pictureUrl?: string;
   websiteUrl?: string;
   editions?: Edition[];
-};
+}
 
-export type Edition = {
+export interface Edition {
   uuid?: string;
   editionNumber: number;
   editionTitle: string;
   rolePlayingGames: RolePlayingGame[];
   collections?: Collection[];
-};
+}
 
-export type Collection = {
+export interface Collection {
   uuid?: string;
   title: string;
   description?: string;
   editions: Edition[];
   publishers: Publisher[];
   books?: Book[];
-};
+}
 
-export type Book = {
+export interface Book {
   uuid?: string;
   title: string;
   subtitle?: string;
@@ -56,11 +56,11 @@ export type Book = {
   publishers?: Publisher[];
   rolePlayingGames?: RolePlayingGame[];
   editions?: Edition[];
-};
+}
 
-export type Author = {
+export interface Author {
   uuid: string;
   firstname: string;
   lastname: string;
   books: Book[];
-};
+}

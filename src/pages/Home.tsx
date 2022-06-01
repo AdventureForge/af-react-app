@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 
 import tavern from '../assets/images/tavern.jpg';
-import Button from '../components/ui/Button';
+import ButtonLink from '../components/ui/ButtonLink';
 import Card from '../components/ui/Card';
 import Section from '../components/layout/Section';
 
@@ -26,7 +26,7 @@ const Home = () => {
               Adventure Forge your new companion to create you next roleplaying
               game adventure
             </p>
-            <Button value="Discover" classes="mt-10" />
+            <ButtonLink value="Discover" className="mt-10" />
           </div>
         </div>
       </Section>
