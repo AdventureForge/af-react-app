@@ -4,6 +4,16 @@ import SideNavBar from '../components/layout/SideNavBar';
 import Button from '../components/ui/Button';
 import useAxios from '../hooks/useAxios';
 import { toEntries } from '../types/functions';
+import PublisherForm from '../components/forms/PublisherForm';
+
+enum AdminPageContentEnum {
+  PUBLISHERS = 'Publishers',
+  ROLEPLAYINGGAMES = 'Roleplaying Games',
+  COLLECTIONS = 'Collections',
+  AUTHORS = 'Authors',
+  BOOKS = 'Books',
+  ADVENTURES = 'Adventures',
+}
 
 type PageContent = {
   value: string;
@@ -11,22 +21,21 @@ type PageContent = {
 };
 
 const items: PageContent[] = [
-  { value: 'Publishers', url: 'games/publishers' },
-  { value: 'Roleplaying Games', url: 'games/roleplayinggames' },
-  { value: 'Collections', url: 'games/collections' },
-  { value: 'Authors', url: 'games/authors' },
-  { value: 'Books', url: 'games/books' },
-  { value: 'Adventures', url: 'adventures/adventures' },
+  { value: AdminPageContentEnum.PUBLISHERS, url: 'games/publishers' },
+  {
+    value: AdminPageContentEnum.ROLEPLAYINGGAMES,
+    url: 'games/roleplayinggames',
+  },
+  { value: AdminPageContentEnum.COLLECTIONS, url: 'games/collections' },
+  { value: AdminPageContentEnum.AUTHORS, url: 'games/authors' },
+  { value: AdminPageContentEnum.BOOKS, url: 'games/books' },
+  { value: AdminPageContentEnum.ADVENTURES, url: 'adventures/adventures' },
 ];
 
 const Admin = () => {
   const [pageContent, setPageContent] = useState<PageContent>(items[0]);
   const [dataReturned, setDataReturned] = useState(false);
   const axiosInstance = useAxios();
-  const [enteredName, setEnteredName] = useState('');
-  const [enteredWebsiteUrl, setEnteredWebSiteUrl] = useState('');
-  const [enteredDescription, setEnteredDescription] = useState('');
-  const [enteredLogoUrl, setEnteredLogoUrl] = useState('');
 
   useEffect(() => {
     !!axiosInstance.current &&
@@ -51,33 +60,6 @@ const Admin = () => {
     setPageContent(items[0]);
   };
 
-  const onNameChange = (input: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(input.target.value);
-    setEnteredName(input.target.value);
-  };
-
-  const onWebUrlChange = (input: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(input.target.value);
-    setEnteredWebSiteUrl(input.target.value);
-  };
-
-  const onLogoUrlChange = (input: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(input.target.value);
-    setEnteredLogoUrl(input.target.value);
-  };
-
-  const onDescriptionChange = (
-    input: React.ChangeEvent<HTMLTextAreaElement>
-  ) => {
-    console.log(input.target.value);
-    setEnteredDescription(input.target.value);
-  };
-
-  const onFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    console.log('submit');
-  };
-
   return (
     <div className="grid grid-cols-5 h-full">
       <SideNavBar items={items} onClick={onNavItemClick} />
@@ -86,64 +68,10 @@ const Admin = () => {
           {pageContent.value}
         </h1>
         <p>No {pageContent.value.toLowerCase()} found, create one : </p>
-        {!dataReturned && (
-          <form className="flex flex-col" onSubmit={onFormSubmit}>
-            <div>
-              <label htmlFor="name" className="block">
-                Name
-              </label>
-              <input
-                id="name"
-                type="text"
-                onChange={onNameChange}
-                value={enteredName}
-              />
-            </div>
-            <div>
-              <label htmlFor="websiteurl" className="block">
-                Website URL
-              </label>
-              <input
-                id="websiteurl"
-                type="text"
-                onChange={onWebUrlChange}
-                value={enteredWebsiteUrl}
-              />
-            </div>
-            <div>
-              <label htmlFor="description" className="block">
-                Description
-              </label>
-              <textarea
-                id="description"
-                name="description"
-                onChange={onDescriptionChange}
-                value={enteredDescription}
-                className="block"
-              />
-            </div>
-            <div>
-              <label htmlFor="logoUrl" className="block">
-                Logo url
-              </label>
-              <input
-                id="logoUrl"
-                name="logoUrl"
-                type="text"
-                onChange={onLogoUrlChange}
-                value={enteredLogoUrl}
-                className="block"
-              />
-            </div>
-            <button
-              value="save"
-              type="submit"
-              className="block border-2 rounded-full font-semibold w-40 py-2 px-8 cursor-pointer text-base border-violet-500 active:bg-violet-900 active:scale-105 transition ease-in-out bg-violet-500 text-white hover:bg-violet-800"
-            >
-              Save
-            </button>
-          </form>
-        )}
+        {!dataReturned &&
+          pageContent.value === AdminPageContentEnum.PUBLISHERS && (
+            <PublisherForm />
+          )}
       </Section>
     </div>
   );
