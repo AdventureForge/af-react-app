@@ -9,7 +9,7 @@ const MainFooter = () => {
   const { keycloak, initialized } = useKeycloak();
   return (
     <footer className="text-center bg-zinc-900 text-white z-10 relative">
-      <div className="container px-6 pt-6">
+      <div className="container px-6 pt-6 m-auto">
         <div className="flex justify-center mb-6">
           <CircleIcon link="https://www.linkedin.com/in/morgan-lombard-37502976/">
             <LinkedinIcon />

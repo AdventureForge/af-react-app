@@ -64,3 +64,12 @@ export interface Author {
   lastname: string;
   books: Book[];
 }
+
+export interface PageInfo {
+  firstElement: boolean;
+  lastElement: boolean;
+  pageNumber: number;
+  pageSize: number;
+  totalElements: number;
+  totalPages: number;
+}

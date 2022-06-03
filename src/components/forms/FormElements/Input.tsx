@@ -1,4 +1,5 @@
 import classNames from 'classnames';
+import React, { ReactEventHandler } from 'react';
 import { FieldError, Path, UseFormRegister } from 'react-hook-form';
 import FormErrorMessage from './FormErrorMessage';
 
@@ -11,6 +12,8 @@ interface InputProps<T> {
   errorMessage?: string;
   type?: React.HTMLInputTypeAttribute;
   placeholder?: string;
+  defaultValue?: string;
+  onChange?: (event: ReactEventHandler) => void;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-constraint
@@ -23,6 +26,7 @@ const Input = <T extends unknown>({
   errorMessage,
   type,
   placeholder,
+  defaultValue,
 }: InputProps<T>) => {
   const classes = classNames(
     'border-2',
@@ -53,6 +57,7 @@ const Input = <T extends unknown>({
         placeholder={placeholder}
         {...register(label, { required, pattern })}
         className={classes}
+        defaultValue={defaultValue}
       />
       {errors && <FormErrorMessage>{errorMessage}</FormErrorMessage>}
     </div>

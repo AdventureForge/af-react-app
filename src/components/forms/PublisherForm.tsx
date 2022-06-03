@@ -13,7 +13,7 @@ export interface IPublisherForm {
 }
 
 type Props = {
-  onConfirm: (newPublisher: Publisher) => void;
+  onConfirm: <T>(t: T) => void;
   onCancel: () => void;
 };
 
@@ -31,7 +31,7 @@ const PublisherForm: React.FC<Props> = (props) => {
       websiteUrl: data['website url'],
       logo: data['logo url'],
     };
-    props.onConfirm(newPublisher);
+    props.onConfirm<Publisher>(newPublisher);
   };
 
   return (

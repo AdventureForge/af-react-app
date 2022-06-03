@@ -1,16 +1,15 @@
-/* eslint-disable react/jsx-key */
-import { useState, useEffect, useMemo } from 'react';
-import Section from '../components/layout/Section';
+import { useState, useEffect, useCallback } from 'react';
 import SideNavBar from '../components/layout/SideNavBar';
 import useAxios from '../hooks/useAxios';
 import { toEntries } from '../types/functions';
 import PublisherForm from '../components/forms/PublisherForm';
-import Button from '../components/ui/Button';
-import Modal from '../components/ui/Modal';
-import { Publisher } from '../types/domain';
+import { PageInfo, Publisher } from '../types/domain';
 import Loader from '../components/ui/Loader';
-import { Column, useSortBy, useTable } from 'react-table';
-import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/outline';
+import AdminContent from '../components/admin/AdminContent';
+import {
+  IPublisherHeaderTypes,
+  publisherHeaders,
+} from '../types/table-headers';
 
 enum AdminPageContentEnum {
   PUBLISHERS = 'Publishers',
@@ -21,12 +20,12 @@ enum AdminPageContentEnum {
   ADVENTURES = 'Adventures',
 }
 
-type PageContent = {
+export type AdminPageContent = {
   value: string;
   url: string;
 };
 
-const items: PageContent[] = [
+const items: AdminPageContent[] = [
   { value: AdminPageContentEnum.PUBLISHERS, url: 'games/publishers' },
   {
     value: AdminPageContentEnum.ROLEPLAYINGGAMES,
@@ -39,64 +38,17 @@ const items: PageContent[] = [
 ];
 
 const Admin = () => {
-  const [pageContent, setPageContent] = useState<PageContent>(items[0]);
-  const [dataReturned, setDataReturned] = useState(false);
-  const [modalDisplayed, setModalDisplayed] = useState(false);
+  const [isDataReturned, setDataReturned] = useState(false);
+  const [isModalDisplayed, setModalDisplayed] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [pageContent, setPageContent] = useState<AdminPageContent>(items[0]);
   const [publisherData, setPublisherData] = useState<Publisher[]>([]);
+  const [pageInfo, setPageInfo] = useState<PageInfo | null>(null);
   const axiosInstance = useAxios();
 
-  const columns: Column<{
-    uuid?: string;
-    name?: string;
-    description?: string;
-    websiteUrl?: string;
-    logo?: string;
-  }>[] = useMemo(
-    () => [
-      {
-        Header: 'Uuid',
-        accessor: 'uuid', // accessor is the "key" in the data
-      },
-      {
-        Header: 'Name',
-        accessor: 'name',
-      },
-      {
-        Header: 'Description',
-        accessor: 'description',
-      },
-      {
-        Header: 'Website url',
-        accessor: 'websiteUrl',
-      },
-      {
-        Header: 'Logo url',
-        accessor: 'logo',
-      },
-    ],
-    []
-  );
-
-  const data = useMemo((): Publisher[] => [...publisherData], []);
-
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-    useTable({ columns, data }, useSortBy);
-
   useEffect(() => {
-    !!axiosInstance.current &&
-      axiosInstance.current
-        .get(`${pageContent.url}`)
-        .then((response) => {
-          if (response.data.length == 0) {
-            console.log('no data');
-            setDataReturned(false);
-          } else {
-            setDataReturned(true);
-            setPublisherData(response.data.data);
-          }
-        })
-        .catch((error) => console.log(error.response));
+    setIsLoading(true);
+    fetchData();
   }, [pageContent]);
 
   const onNavItemClick = (itemClicked: string) => {
@@ -109,19 +61,45 @@ const Admin = () => {
     setPageContent(items[0]);
   };
 
-  const onAddPublisher = (newPublisher: Publisher) => {
+  //const data = useMemo((): Publisher[] => [...publisherData], [isDataReturned]);
+
+  const fetchData = useCallback(
+    async () =>
+      !!axiosInstance.current &&
+      axiosInstance.current
+        .get(`${pageContent.url}`)
+        .then((response) => {
+          if (response.data.length == 0) {
+            console.log('no data');
+            setDataReturned(false);
+          } else {
+            console.log(response.data);
+            setDataReturned(true);
+            setPublisherData(response.data.data);
+            setPageInfo(response.data.pageInfo);
+          }
+        })
+        .catch((error) => {
+          console.log(error.response);
+        })
+        .finally(() => {
+          console.log('end fetch');
+          setIsLoading(false);
+        }),
+    [pageContent]
+  );
+
+  const addDataHandler = <T,>(t: T) => {
     setModalDisplayed(false);
-    setIsLoading(true);
-    console.log(JSON.stringify(newPublisher));
     !!axiosInstance.current &&
       axiosInstance.current
-        .post(items[0].url, newPublisher)
+        .post(items[0].url, t)
         .then((response) => console.log(response))
         .catch((error) => {
           console.log(error);
           console.log(error.response.data);
-        })
-        .finally(() => setIsLoading(false));
+          fetchData();
+        });
   };
 
   const openModalHandler = () => {
@@ -133,102 +111,26 @@ const Admin = () => {
 
   return (
     <div className="grid grid-cols-5 h-full">
-      {isLoading && <Loader />}
-      {!isLoading && (
+      {isLoading && !isDataReturned && !pageInfo && <Loader />}
+      {!isLoading && isDataReturned && pageInfo && (
         <>
           <SideNavBar items={items} onClick={onNavItemClick} />
-          <Section className="col-span-4 py-6 px-10 mb-14">
-            <div className="flex flex-row items-center justify-between">
-              <div className="flex items-center">
-                <div className="w-5 h-5 bg-cyan-400"></div>
-                <h1 className="text-white text-3xl font-semibold block pl-5">
-                  {pageContent.value}
-                </h1>
-              </div>
-              <Button
-                value={`new ${pageContent.value.toLowerCase()}`}
-                className="w-64"
-                onClick={openModalHandler}
-                style="plain"
-                color="accent"
+          <AdminContent
+            pageContent={pageContent}
+            pageInfo={pageInfo}
+            onCloseModal={closeModalHandler}
+            onOpenModal={openModalHandler}
+            modalDisplayed={isModalDisplayed}
+            isDataReturned={isDataReturned}
+            dataFromDB={publisherData}
+            headers={publisherHeaders}
+            form={
+              <PublisherForm
+                onConfirm={addDataHandler}
+                onCancel={closeModalHandler}
               />
-            </div>
-            {modalDisplayed && (
-              <Modal onClose={closeModalHandler}>
-                <PublisherForm
-                  onConfirm={onAddPublisher}
-                  onCancel={closeModalHandler}
-                />
-              </Modal>
-            )}
-
-            {!dataReturned && (
-              <p className="text-center mt-20 text-xl italic">
-                No {pageContent.value.toLowerCase()} found!{' '}
-              </p>
-            )}
-            {dataReturned && publisherData.length > 0 && (
-              <table
-                {...getTableProps()}
-                className="w-full shadow-lg rounded mt-10"
-              >
-                <thead className="border-white border-solid bg-slate-800">
-                  {headerGroups.map((headerGroup) => (
-                    <tr {...headerGroup.getHeaderGroupProps()}>
-                      {headerGroup.headers.map((column) => (
-                        <th
-                          {...column.getHeaderProps(
-                            column.getSortByToggleProps()
-                          )}
-                          className="p-4 text-left font-bold"
-                        >
-                          {column.render('Header')}
-                          <span>
-                            {column.isSorted ? (
-                              column.isSortedDesc ? (
-                                <ChevronDownIcon className="ml-4 w-4 inline-block" />
-                              ) : (
-                                <ChevronUpIcon className="ml-4 w-4 inline-block" />
-                              )
-                            ) : (
-                              ''
-                            )}
-                          </span>
-                        </th>
-                      ))}
-                    </tr>
-                  ))}
-                </thead>
-                <tbody
-                  {...getTableBodyProps()}
-                  className="border-white border-solid"
-                >
-                  {rows.map((row, i) => {
-                    prepareRow(row);
-                    return (
-                      <tr
-                        {...row.getRowProps()}
-                        className="border-white border-solid"
-                      >
-                        {row.cells.map((cell) => {
-                          return (
-                            <td
-                              {...cell.getCellProps()}
-                              className={`${
-                                i % 2 === 0 ? 'bg-slate-700' : ''
-                              } px-4`}
-                            >
-                              {cell.render('Cell')}
-                            </td>
-                          );
-                        })}
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            )}
-          </Section>
+            }
+          ></AdminContent>
         </>
       )}
     </div>
