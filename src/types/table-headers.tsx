@@ -1,7 +1,8 @@
+import { access } from 'fs';
 import { Column } from 'react-table';
+import { BaseEntity } from './domain';
 
-export interface IPublisherHeaderTypes {
-  uuid?: string;
+export interface IPublisherHeaderTypes extends BaseEntity {
   name?: string;
   description?: string;
   websiteUrl?: string;
@@ -29,10 +30,25 @@ export const publisherHeaders: Column<IPublisherHeaderTypes>[] = [
     Header: 'Logo url',
     accessor: 'logo',
   },
+  {
+    Header: 'User Created',
+    accessor: 'userCreated',
+  },
+  {
+    Header: 'Date Created',
+    accessor: 'dateCreated',
+  },
+  {
+    Header: 'User Modified',
+    accessor: 'userModified',
+  },
+  {
+    Header: 'Last Modified',
+    accessor: 'lastModified',
+  },
 ];
 
-export interface IRolePlayingGameHeaderTypes {
-  uuid?: string;
+export interface IRolePlayingGameHeaderTypes extends BaseEntity {
   title?: string;
   subtitle?: string;
   description?: string;
@@ -64,5 +80,21 @@ export const rolePlayingGameHeaders: Column<IRolePlayingGameHeaderTypes>[] = [
   {
     Header: 'Website url',
     accessor: 'websiteUrl',
+  },
+  {
+    Header: 'User Created',
+    accessor: 'userCreated',
+  },
+  {
+    Header: 'Date Created',
+    accessor: 'dateCreated',
+  },
+  {
+    Header: 'User Modified',
+    accessor: 'userModified',
+  },
+  {
+    Header: 'Last Modified',
+    accessor: 'lastModified',
   },
 ];

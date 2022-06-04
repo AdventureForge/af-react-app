@@ -8,6 +8,10 @@ export enum Category {
 
 export interface BaseEntity {
   uuid?: string;
+  dateCreated?: string;
+  lastModified?: string;
+  userCreated?: string;
+  userModified?: string;
 }
 
 export interface Publisher extends BaseEntity {
