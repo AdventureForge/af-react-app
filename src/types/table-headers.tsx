@@ -30,3 +30,39 @@ export const publisherHeaders: Column<IPublisherHeaderTypes>[] = [
     accessor: 'logo',
   },
 ];
+
+export interface IRolePlayingGameHeaderTypes {
+  uuid?: string;
+  title?: string;
+  subtitle?: string;
+  description?: string;
+  pictureUrl?: string;
+  websiteUrl?: string;
+}
+
+export const rolePlayingGameHeaders: Column<IRolePlayingGameHeaderTypes>[] = [
+  {
+    Header: 'Uuid',
+    accessor: 'uuid',
+  },
+  {
+    Header: 'Title',
+    accessor: 'title',
+  },
+  {
+    Header: 'Subtitle',
+    accessor: 'subtitle',
+  },
+  {
+    Header: 'Description',
+    accessor: 'description',
+  },
+  {
+    Header: 'Picture url',
+    accessor: 'pictureUrl',
+  },
+  {
+    Header: 'Website url',
+    accessor: 'websiteUrl',
+  },
+];
