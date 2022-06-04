@@ -68,10 +68,10 @@ const TablePagination: React.FC<TablePaginationProps> = ({
           onChange={(e) => {
             gotoPage(Number(e.target.value));
           }}
-          className="inline-block bg-transparent border-solid rounded-full border-violet-500 text-violet-500"
+          className="inline-block bg-slate-900 border-solid rounded-full border-violet-500 text-violet-500"
         >
           {Array.from(Array(pageCount).keys()).map((i) => (
-            <option key={i} value={i}>
+            <option key={i} value={i} className="bg-slate-900">
               page {i + 1}
             </option>
           ))}
@@ -82,13 +82,13 @@ const TablePagination: React.FC<TablePaginationProps> = ({
         page{' '}
         <select
           value={pageSize}
-          className="inline-block bg-transparent border-solid rounded-full border-violet-500 text-violet-500"
+          className="inline-block bg-slate-900 border-solid rounded-full border-violet-500 text-violet-500"
           onChange={(e) => {
             setPageSize(Number(e.target.value));
           }}
         >
           {[20, 30, 40, 100].map((pageSize) => (
-            <option key={pageSize} value={pageSize}>
+            <option key={pageSize} value={pageSize} className="bg-slate-900">
               size {pageSize}
             </option>
           ))}

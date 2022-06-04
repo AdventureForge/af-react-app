@@ -7,7 +7,7 @@ import TablePagination from './TablePagination';
 type Props = {
   data: object[];
   columns: Column<object>[];
-  pageInfo: PageInfo;
+  pageInfo?: PageInfo;
 };
 
 const Table: React.FC<Props> = ({ data, columns, pageInfo }) => {
@@ -32,10 +32,10 @@ const Table: React.FC<Props> = ({ data, columns, pageInfo }) => {
       columns,
       data,
       manualPagination: true,
-      pageCount: pageInfo.totalPages,
+      pageCount: pageInfo?.totalPages,
       initialState: {
-        pageIndex: pageInfo.pageNumber,
-        pageSize: pageInfo.pageSize,
+        pageIndex: pageInfo?.pageNumber,
+        pageSize: pageInfo?.pageSize,
       },
     },
     useSortBy,
