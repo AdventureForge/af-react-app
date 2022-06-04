@@ -7,7 +7,7 @@ const Backdrop: React.FC<BackDropProps> = (props) => {
   return (
     <div
       className={
-        'fixed top-0 left-0 w-full h-screen z-40 bg-cyan-900 opacity-70'
+        'absolute w-full h-screen z-40 bg-cyan-900 opacity-70 overflow-auto'
       }
       onClick={props.onClose}
     />
@@ -21,7 +21,7 @@ const ModalOverlay: React.FC<OverlayProps> = (props) => {
   return (
     <div
       className={
-        'fixed top-12 left-12 w-11/12 bg-slate-900 p-10 rounded-3xl shadow-lg z-50'
+        'fixed top-12 left-12 w-11/12 h-5/6 bg-slate-900 p-10 rounded-3xl shadow-lg z-50 overflow-y-scroll'
       }
     >
       <div>{props.children}</div>
