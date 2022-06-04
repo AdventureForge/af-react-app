@@ -1,6 +1,5 @@
 import { useMemo } from 'react';
 import { Column } from 'react-table';
-import { AdminPageContent } from '../../pages/Admin';
 import { PageInfo } from '../../types/domain';
 import Section from '../layout/Section';
 import Table from '../table/Table';
@@ -8,8 +7,8 @@ import Button from '../ui/Button';
 import Modal from '../ui/Modal';
 
 type AdminContentProps = {
-  pageContent: AdminPageContent;
-  pageInfo: PageInfo;
+  title: string;
+  pageInfo?: PageInfo;
   onOpenModal: () => void;
   onCloseModal: () => void;
   modalDisplayed: boolean;
@@ -20,20 +19,20 @@ type AdminContentProps = {
 };
 
 const AdminContent: React.FC<AdminContentProps> = (props) => {
-  const data = useMemo(() => [...props.dataFromDB], []);
+  const data = useMemo(() => [...props.dataFromDB], [props.dataFromDB]);
   const columns: Column<object>[] = useMemo(() => props.headers, []);
 
   return (
-    <Section className="col-span-4 py-6 px-10 mb-14">
+    <Section className="col-span-5 py-6 px-10 mb-14">
       <div className="flex flxex-row items-center justify-between">
         <div className="flex items-center">
-          <div className="w-5 h-5 bg-cyan-400" />
-          <h1 className="text-white text-3xl font-semibold block pl-5">
-            {props.pageContent.value} ({props.pageInfo.totalElements})
+          <h1 className="text-white text-3xl font-semibold pl-5 inline-block border-l-[40px] border-l-cyan-500">
+            {props.title}{' '}
+            <span className="text-xl">({props.pageInfo?.totalElements})</span>
           </h1>
         </div>
         <Button
-          value={`new ${props.pageContent.value.toLowerCase()}`}
+          value={`new ${props.title}`}
           className="w-64"
           onClick={props.onOpenModal}
           style="plain"
@@ -45,7 +44,7 @@ const AdminContent: React.FC<AdminContentProps> = (props) => {
       )}
       {!props.isDataReturned && (
         <p className="text-center mt-20 text-xl italic">
-          No {props.pageContent.value.toLowerCase()} found!{' '}
+          No {props.title} found!{' '}
         </p>
       )}
       {props.isDataReturned && props.dataFromDB.length > 0 && (

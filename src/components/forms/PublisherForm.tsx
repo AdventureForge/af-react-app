@@ -36,7 +36,9 @@ const PublisherForm: React.FC<Props> = (props) => {
 
   return (
     <div className="px-28 overflow-y-auto">
-      <h2 className="text-3xl font-semibold">Add a new publisher</h2>
+      <h2 className="text-3xl font-semibold block border-l-[40px] pl-4 border-cyan-500">
+        Add a new publisher
+      </h2>
       <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
         <Input<IPublisherForm>
           label="name"
