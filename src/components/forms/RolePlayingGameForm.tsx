@@ -3,7 +3,7 @@ import { urlValidationPattern } from '../../utils/patterns';
 import Button from '../ui/Button';
 import Input from './FormElements/Input';
 import TextArea from '../forms/FormElements/TextArea';
-import { Publisher, RolePlayingGame } from '../../types/domain';
+import { BaseEntity, Publisher, RolePlayingGame } from '../../types/domain';
 
 export interface IRolePlayingGameForm {
   title: string;
@@ -14,7 +14,7 @@ export interface IRolePlayingGameForm {
 }
 
 type Props = {
-  onConfirm: <T>(t: T) => void;
+  onConfirm: <T extends BaseEntity>(t: T) => void;
   onCancel: () => void;
 };
 

@@ -1,16 +1,88 @@
+/* eslint-disable react/display-name */
 /* eslint-disable react/jsx-key */
-import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/outline';
-import { useTable, useSortBy, Column, usePagination } from 'react-table';
-import { PageInfo } from '../../types/domain';
+import {
+  ChevronDownIcon,
+  ChevronUpIcon,
+  PencilAltIcon,
+  TrashIcon,
+} from '@heroicons/react/outline';
+import { useEffect } from 'react';
+import {
+  useTable,
+  useSortBy,
+  Column,
+  usePagination,
+  useRowSelect,
+} from 'react-table';
+import { PageInfo, Publisher } from '../../types/domain';
+import IndeterminateCheckbox from './IndeterminateCheckbox';
 import TablePagination from './TablePagination';
 
-type Props = {
+type TableProps = {
   data: object[];
   columns: Column<object>[];
   pageInfo?: PageInfo;
+  onRowSelect: (row: (string | undefined)[]) => void;
+  onDelete: () => void;
 };
 
-const Table: React.FC<Props> = ({ data, columns, pageInfo }) => {
+const Table: React.FC<TableProps> = ({
+  data,
+  columns,
+  pageInfo,
+  onRowSelect,
+  onDelete,
+}) => {
+  const instance = useTable(
+    {
+      columns,
+      data,
+      manualPagination: true,
+      pageCount: pageInfo?.totalPages,
+      initialState: {
+        pageIndex: pageInfo?.pageNumber,
+        pageSize: pageInfo?.pageSize,
+      },
+    },
+    useSortBy,
+    usePagination,
+    useRowSelect,
+    (hooks) => {
+      hooks.visibleColumns.push((columns) => [
+        {
+          id: 'selection',
+          Header: ({ getToggleAllPageRowsSelectedProps }) => (
+            <div>
+              <IndeterminateCheckbox
+                name={'test'}
+                {...getToggleAllPageRowsSelectedProps()}
+              />
+            </div>
+          ),
+          Cell: ({ row }) => (
+            <div>
+              <IndeterminateCheckbox
+                name={'test2'}
+                {...row.getToggleRowSelectedProps()}
+              />
+            </div>
+          ),
+        },
+        {
+          id: 'edit',
+          Header: () => <div>Edit</div>,
+          Cell: (table) => (
+            <PencilAltIcon
+              className="w-5 hover:text-violet-500 cursor-pointer"
+              onClick={() => console.log(table.data[table.row.id])}
+            />
+          ),
+        },
+        ...columns,
+      ]);
+    }
+  );
+
   const {
     getTableProps,
     getTableBodyProps,
@@ -25,38 +97,38 @@ const Table: React.FC<Props> = ({ data, columns, pageInfo }) => {
     nextPage,
     previousPage,
     setPageSize,
-
+    selectedFlatRows,
     state: { pageIndex, pageSize },
-  } = useTable(
-    {
-      columns,
-      data,
-      manualPagination: true,
-      pageCount: pageInfo?.totalPages,
-      initialState: {
-        pageIndex: pageInfo?.pageNumber,
-        pageSize: pageInfo?.pageSize,
-      },
-    },
-    useSortBy,
-    usePagination
-  );
+  } = instance;
+
+  useEffect(() => {
+    const selectedPublishesUuids = selectedFlatRows
+      .map((selectedFlatRow) => selectedFlatRow.original as Publisher)
+      .map((publisher) => publisher.uuid);
+
+    onRowSelect(selectedPublishesUuids);
+  }, [selectedFlatRows]);
 
   return (
     <div className="mt-10">
-      <TablePagination
-        canNextPage={canNextPage}
-        canPreviousPage={canPreviousPage}
-        gotoPage={gotoPage}
-        nextPage={nextPage}
-        pageCount={pageCount}
-        pageIndex={pageIndex}
-        pageOptions={pageOptions}
-        pageSize={pageSize}
-        previousPage={previousPage}
-        setPageSize={setPageSize}
-        className="mb-4"
-      />
+      <div className="flex items-center align-top mb-4">
+        <TablePagination
+          canNextPage={canNextPage}
+          canPreviousPage={canPreviousPage}
+          gotoPage={gotoPage}
+          nextPage={nextPage}
+          pageCount={pageCount}
+          pageIndex={pageIndex}
+          pageOptions={pageOptions}
+          pageSize={pageSize}
+          previousPage={previousPage}
+          setPageSize={setPageSize}
+        />
+        <TrashIcon
+          className="w-6 ml-6 inline-block hover:text-red-400 cursor-pointer"
+          onClick={onDelete}
+        />
+      </div>
       <table {...getTableProps()} className="w-full shadow-lg rounded">
         <thead className="border-white border-solid bg-slate-800">
           {headerGroups.map((headerGroup) => (

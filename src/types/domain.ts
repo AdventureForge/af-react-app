@@ -6,8 +6,11 @@ export enum Category {
   ATLAS = 'Atlas',
 }
 
-export interface Publisher {
+export interface BaseEntity {
   uuid?: string;
+}
+
+export interface Publisher extends BaseEntity {
   name?: string;
   websiteUrl?: string;
   description?: string;
@@ -15,8 +18,7 @@ export interface Publisher {
   collections?: Collection[];
 }
 
-export interface RolePlayingGame {
-  uuid?: string;
+export interface RolePlayingGame extends BaseEntity {
   title: string;
   subtitle?: string;
   description?: string;
@@ -25,16 +27,14 @@ export interface RolePlayingGame {
   editions?: Edition[];
 }
 
-export interface Edition {
-  uuid?: string;
+export interface Edition extends BaseEntity {
   editionNumber: number;
   editionTitle: string;
   rolePlayingGames: RolePlayingGame[];
   collections?: Collection[];
 }
 
-export interface Collection {
-  uuid?: string;
+export interface Collection extends BaseEntity {
   title: string;
   description?: string;
   editions: Edition[];
@@ -42,8 +42,7 @@ export interface Collection {
   books?: Book[];
 }
 
-export interface Book {
-  uuid?: string;
+export interface Book extends BaseEntity {
   title: string;
   subtitle?: string;
   cover?: string;
@@ -58,8 +57,7 @@ export interface Book {
   editions?: Edition[];
 }
 
-export interface Author {
-  uuid: string;
+export interface Author extends BaseEntity {
   firstname: string;
   lastname: string;
   books: Book[];

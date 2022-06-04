@@ -33,7 +33,7 @@ const TablePagination: React.FC<TablePaginationProps> = ({
   className,
 }) => {
   return (
-    <div className={`pagination flex justify-end ${className}`}>
+    <div className={`pagination flex justify-start ${className}`}>
       <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
         {
           <ChevronDoubleLeftIcon className="w-4 hover:w-5 cursor-pointer hover:text-violet-400" />

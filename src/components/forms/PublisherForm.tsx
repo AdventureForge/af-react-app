@@ -3,7 +3,7 @@ import { urlValidationPattern } from '../../utils/patterns';
 import Button from '../ui/Button';
 import Input from './FormElements/Input';
 import TextArea from '../forms/FormElements/TextArea';
-import { Publisher } from '../../types/domain';
+import { BaseEntity, Publisher } from '../../types/domain';
 
 export interface IPublisherForm {
   name: string;
@@ -13,7 +13,7 @@ export interface IPublisherForm {
 }
 
 type Props = {
-  onConfirm: <T>(t: T) => void;
+  onConfirm: <T extends BaseEntity>(t: T) => void;
   onCancel: () => void;
 };
 

@@ -1,6 +1,9 @@
 import { useMemo } from 'react';
 import { Column } from 'react-table';
-import { PageInfo } from '../../types/domain';
+import { AdminPageContentEnum } from '../../pages/Admin';
+import { BaseEntity, PageInfo } from '../../types/domain';
+import PublisherForm from '../forms/PublisherForm';
+import RolePlayingGameForm from '../forms/RolePlayingGameForm';
 import Section from '../layout/Section';
 import Table from '../table/Table';
 import Button from '../ui/Button';
@@ -9,10 +12,14 @@ import Modal from '../ui/Modal';
 type AdminContentProps = {
   title: string;
   pageInfo?: PageInfo;
+  pageType: AdminPageContentEnum;
   onOpenModal: () => void;
   onCloseModal: () => void;
+  onRowSelect: (row: (string | undefined)[]) => void;
+  onDelete: () => void;
+  onCreate: <T extends BaseEntity>(t: T) => void;
+  onUpdate: <T extends BaseEntity>(t: T) => void;
   modalDisplayed: boolean;
-  form: React.ReactNode;
   isDataReturned: boolean;
   dataFromDB: object[];
   headers: Column<object>[];
@@ -21,6 +28,27 @@ type AdminContentProps = {
 const AdminContent: React.FC<AdminContentProps> = (props) => {
   const data = useMemo(() => [...props.dataFromDB], [props.dataFromDB]);
   const columns: Column<object>[] = useMemo(() => props.headers, []);
+
+  const getForm = () => {
+    switch (props.pageType) {
+      case AdminPageContentEnum.PUBLISHERS:
+        return (
+          <PublisherForm
+            onConfirm={props.onCreate}
+            onCancel={props.onCloseModal}
+          />
+        );
+      case AdminPageContentEnum.ROLEPLAYINGGAMES:
+        return (
+          <RolePlayingGameForm
+            onConfirm={props.onCreate}
+            onCancel={props.onCloseModal}
+          />
+        );
+      default:
+        break;
+    }
+  };
 
   return (
     <Section className="col-span-5 py-6 px-10 mb-14">
@@ -40,7 +68,7 @@ const AdminContent: React.FC<AdminContentProps> = (props) => {
         />
       </div>
       {props.modalDisplayed && (
-        <Modal onClose={props.onCloseModal}>{props.form}</Modal>
+        <Modal onClose={props.onCloseModal}>{getForm()}</Modal>
       )}
       {!props.isDataReturned && (
         <p className="text-center mt-20 text-xl italic">
@@ -48,7 +76,13 @@ const AdminContent: React.FC<AdminContentProps> = (props) => {
         </p>
       )}
       {props.isDataReturned && props.dataFromDB.length > 0 && (
-        <Table data={data} columns={columns} pageInfo={props.pageInfo} />
+        <Table
+          data={data}
+          columns={columns}
+          pageInfo={props.pageInfo}
+          onRowSelect={props.onRowSelect}
+          onDelete={props.onDelete}
+        />
       )}
     </Section>
   );

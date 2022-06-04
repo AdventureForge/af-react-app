@@ -2,7 +2,12 @@ import { useState, useEffect, useCallback } from 'react';
 import SideNavBar from '../components/layout/SideNavBar';
 import useAxios from '../hooks/useAxios';
 import PublisherForm from '../components/forms/PublisherForm';
-import { PageInfo, Publisher, RolePlayingGame } from '../types/domain';
+import {
+  BaseEntity,
+  PageInfo,
+  Publisher,
+  RolePlayingGame,
+} from '../types/domain';
 import Loader from '../components/ui/Loader';
 import AdminContent from '../components/admin/AdminContent';
 import {
@@ -12,7 +17,7 @@ import {
 import { useParams } from 'react-router-dom';
 import RolePlayingGameForm from '../components/forms/RolePlayingGameForm';
 
-enum AdminPageContentEnum {
+export enum AdminPageContentEnum {
   PUBLISHERS = 'publishers',
   ROLEPLAYINGGAMES = 'roleplayinggames',
   COLLECTIONS = 'collections',
@@ -66,6 +71,7 @@ const Admin = () => {
   const [publisherData, setPublisherData] = useState<Publisher[]>([]);
   const [rpgData, setRpgData] = useState<RolePlayingGame[]>([]);
   const [pageInfo, setPageInfo] = useState<PageInfo | null>(null);
+  const [rowsSelected, setRowsSelected] = useState<(string | undefined)[]>([]);
   const axiosInstance = useAxios();
   const { adminSubPage } = useParams();
   const apiUrl =
@@ -126,11 +132,51 @@ const Admin = () => {
         });
   };
 
+  const deleteDataHanlder = () => {
+    console.log('DELETE');
+    console.log(rowsSelected);
+    !!axiosInstance.current &&
+      axiosInstance.current
+        .delete(apiUrl, {
+          data: rowsSelected,
+        })
+        .then((response) => console.log(response))
+        .then(() => fetchData())
+        .catch((error) => {
+          console.log(error);
+          console.log(error.response.data);
+        });
+  };
+
+  const updateDataHandler = <T extends BaseEntity>(t: T) => {
+    console.log('UPDATE');
+    setModalDisplayed(false);
+    !!axiosInstance.current &&
+      axiosInstance.current
+        .put(`${apiUrl}/${t.uuid}`, t)
+        .then((response) => console.log(response))
+        .then(() => fetchData())
+        .catch((error) => {
+          console.log(error);
+          console.log(error.response.data);
+        });
+  };
+
   const openModalHandler = () => {
     setModalDisplayed(true);
   };
   const closeModalHandler = () => {
     setModalDisplayed(false);
+  };
+
+  const rowSelectedHandler = (rows: (string | undefined)[]) => {
+    setRowsSelected((prev) => {
+      console.log('previous rows:');
+      console.log(prev);
+      console.log('new rows:');
+      console.log(rows);
+      return rows;
+    });
   };
 
   const renderPage = () => {
@@ -162,18 +208,17 @@ const Admin = () => {
           'Missing Title'
         }
         pageInfo={pageInfo ?? undefined}
+        pageType={AdminPageContentEnum.PUBLISHERS}
         onCloseModal={closeModalHandler}
         onOpenModal={openModalHandler}
         modalDisplayed={isModalDisplayed}
         isDataReturned={isDataReturned}
         dataFromDB={publisherData}
         headers={publisherHeaders}
-        form={
-          <PublisherForm
-            onConfirm={addDataHandler}
-            onCancel={closeModalHandler}
-          />
-        }
+        onRowSelect={rowSelectedHandler}
+        onDelete={deleteDataHanlder}
+        onUpdate={updateDataHandler}
+        onCreate={addDataHandler}
       />
     );
   };
@@ -186,18 +231,17 @@ const Admin = () => {
           'Missing Title'
         }
         pageInfo={pageInfo ?? undefined}
+        pageType={AdminPageContentEnum.ROLEPLAYINGGAMES}
         onCloseModal={closeModalHandler}
         onOpenModal={openModalHandler}
         modalDisplayed={isModalDisplayed}
         isDataReturned={isDataReturned}
         dataFromDB={rpgData}
         headers={rolePlayingGameHeaders}
-        form={
-          <RolePlayingGameForm
-            onConfirm={addDataHandler}
-            onCancel={closeModalHandler}
-          />
-        }
+        onRowSelect={rowSelectedHandler}
+        onDelete={deleteDataHanlder}
+        onUpdate={updateDataHandler}
+        onCreate={addDataHandler}
       />
     );
   };
