@@ -69,6 +69,8 @@ const Admin = () => {
   const [publisherData, setPublisherData] = useState<Publisher[]>([]);
   const [rpgData, setRpgData] = useState<RolePlayingGame[]>([]);
   const [pageInfo, setPageInfo] = useState<PageInfo | null>(null);
+  const [pageNumber, setPageNumber] = useState(0);
+  const [pageSize, setPageSize] = useState(20);
   const [rowsSelected, setRowsSelected] = useState<(string | undefined)[]>([]);
   const axiosInstance = useAxios();
   const { adminSubPage } = useParams();
@@ -78,7 +80,7 @@ const Admin = () => {
   useEffect(() => {
     setIsLoading(true);
     fetchData();
-  }, [adminSubPage]);
+  }, [adminSubPage, pageNumber, pageSize]);
 
   useEffect(() => {
     if (isModalDisplayed) document.body.style.overflow = 'hidden';
@@ -89,7 +91,7 @@ const Admin = () => {
     async () =>
       !!axiosInstance.current &&
       axiosInstance.current
-        .get(apiUrl)
+        .get(`${apiUrl}?page=${pageNumber}&size=${pageSize}`)
         .then((response) => {
           if (response.data.length == 0) {
             console.log('no data');
@@ -99,9 +101,11 @@ const Admin = () => {
             console.log(response.data);
             setDataReturned(true);
             adminSubPage === AdminPageContentEnum.PUBLISHERS &&
-              setPublisherData((prev) => response.data.data);
+              // eslint-disable-next-line @typescript-eslint/no-unused-vars
+              setPublisherData((_) => response.data.data);
             adminSubPage === AdminPageContentEnum.ROLEPLAYINGGAMES &&
-              setRpgData((prev) => response.data.data);
+              // eslint-disable-next-line @typescript-eslint/no-unused-vars
+              setRpgData((_) => response.data.data);
             setPageInfo(response.data.pageInfo);
           }
         })
@@ -112,7 +116,7 @@ const Admin = () => {
           console.log('end fetch');
           setIsLoading(false);
         }),
-    [adminSubPage]
+    [adminSubPage, pageNumber, pageSize]
   );
 
   const addDataHandler = <T,>(t: T) => {
@@ -167,6 +171,15 @@ const Admin = () => {
     setModalDisplayed(false);
   };
 
+  const pageNumberHandler = (pageNumberParam: number) => {
+    console.log('page number admin ' + pageNumberParam);
+    setPageNumber((_) => pageNumberParam);
+  };
+  const pageSizeHandler = (pageSizeParam: number) => {
+    console.log('page size admin ' + pageSizeParam);
+    setPageSize((_) => pageSizeParam);
+  };
+
   const rowSelectedHandler = (rows: (string | undefined)[]) => {
     setRowsSelected((prev) => {
       console.log('previous rows:');
@@ -217,6 +230,8 @@ const Admin = () => {
         onDelete={deleteDataHanlder}
         onUpdate={updateDataHandler}
         onCreate={addDataHandler}
+        onPageNumberChange={pageNumberHandler}
+        onPageSizeChange={pageSizeHandler}
       />
     );
   };
@@ -240,6 +255,8 @@ const Admin = () => {
         onDelete={deleteDataHanlder}
         onUpdate={updateDataHandler}
         onCreate={addDataHandler}
+        onPageNumberChange={pageNumberHandler}
+        onPageSizeChange={pageSizeHandler}
       />
     );
   };

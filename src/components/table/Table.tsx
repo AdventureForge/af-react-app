@@ -25,6 +25,8 @@ type TableProps = {
   onRowSelect: (row: (string | undefined)[]) => void;
   onDelete: () => void;
   onEdit: (data: object) => void;
+  onPageNumberChange: (pageNumber: number) => void;
+  onPageSizeChange: (pageSize: number) => void;
 };
 
 const Table: React.FC<TableProps> = ({
@@ -34,6 +36,8 @@ const Table: React.FC<TableProps> = ({
   onRowSelect,
   onDelete,
   onEdit,
+  onPageNumberChange,
+  onPageSizeChange,
 }) => {
   const instance = useTable(
     {
@@ -114,6 +118,16 @@ const Table: React.FC<TableProps> = ({
 
     onRowSelect(selectedPublishesUuids);
   }, [selectedFlatRows]);
+
+  useEffect(() => {
+    console.log('change page number');
+    onPageNumberChange(pageIndex);
+  }, [pageIndex]);
+
+  useEffect(() => {
+    console.log('change page size');
+    onPageSizeChange(pageSize);
+  }, [pageSize]);
 
   return (
     <div className="mt-10">

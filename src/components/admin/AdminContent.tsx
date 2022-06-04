@@ -29,6 +29,8 @@ type AdminContentProps = {
   onDelete: () => void;
   onCreate: <T extends BaseEntity>(t: T) => void;
   onUpdate: <T extends BaseEntity>(t: T) => void;
+  onPageNumberChange: (pageNumber: number) => void;
+  onPageSizeChange: (pageSize: number) => void;
   modalDisplayed: boolean;
   isDataReturned: boolean;
   dataFromDB: object[];
@@ -117,6 +119,8 @@ const AdminContent: React.FC<AdminContentProps> = (props) => {
           onRowSelect={props.onRowSelect}
           onDelete={props.onDelete}
           onEdit={openModalUpdateHandler}
+          onPageNumberChange={props.onPageNumberChange}
+          onPageSizeChange={props.onPageSizeChange}
         />
       )}
     </Section>
