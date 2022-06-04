@@ -13,7 +13,7 @@ import {
   publisherHeaders,
   rolePlayingGameHeaders,
 } from '../types/table-headers';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 export enum AdminPageContentEnum {
   PUBLISHERS = 'publishers',
@@ -76,6 +76,7 @@ const Admin = () => {
   const { adminSubPage } = useParams();
   const apiUrl =
     adminPages.get(adminSubPage ?? AdminPageContentEnum.PUBLISHERS)?.url ?? '';
+  const navigate = useNavigate();
 
   useEffect(() => {
     setIsLoading(true);
@@ -191,22 +192,23 @@ const Admin = () => {
   };
 
   const renderPage = () => {
+    console.log('swich url');
     switch (adminSubPage) {
       case AdminPageContentEnum.PUBLISHERS:
         return getPublisherPageContent();
       case AdminPageContentEnum.ROLEPLAYINGGAMES:
         return getRoleplyingGamesPageContent();
       case AdminPageContentEnum.COLLECTIONS:
-        return getRoleplyingGamesPageContent();
+        return getCollectionsPageContent();
       case AdminPageContentEnum.AUTHORS:
-        return getRoleplyingGamesPageContent();
+        return getAuthorsPageContent();
       case AdminPageContentEnum.BOOKS:
-        return getRoleplyingGamesPageContent();
+        return getBooksPageContent();
       case AdminPageContentEnum.ADVENTURES:
-        return getRoleplyingGamesPageContent();
+        return getAdventuresPageContent();
 
       default:
-        console.log('failed match');
+        navigate('/admin/publishers');
         break;
     }
   };
@@ -260,10 +262,104 @@ const Admin = () => {
       />
     );
   };
-  const getCollectionsPageContent = () => <p>Work In Progress</p>;
-  const getAuthorsPageContent = () => <p>Work In Progress</p>;
-  const getBooksPageContent = () => <p>Work In Progress</p>;
-  const getAdventuresPageContent = () => <p>Work In Progress</p>;
+
+  const getCollectionsPageContent = () => {
+    return (
+      <AdminContent
+        title={
+          adminPages.get(AdminPageContentEnum.COLLECTIONS)?.title ??
+          'Missing Title'
+        }
+        pageInfo={pageInfo ?? undefined}
+        pageType={AdminPageContentEnum.COLLECTIONS}
+        onCloseModal={closeModalHandler}
+        onOpenModal={openModalHandler}
+        modalDisplayed={isModalDisplayed}
+        isDataReturned={isDataReturned}
+        dataFromDB={rpgData}
+        headers={rolePlayingGameHeaders}
+        onRowSelect={rowSelectedHandler}
+        onDelete={deleteDataHanlder}
+        onUpdate={updateDataHandler}
+        onCreate={addDataHandler}
+        onPageNumberChange={pageNumberHandler}
+        onPageSizeChange={pageSizeHandler}
+      />
+    );
+  };
+
+  const getAuthorsPageContent = () => {
+    return (
+      <AdminContent
+        title={
+          adminPages.get(AdminPageContentEnum.AUTHORS)?.title ?? 'Missing Title'
+        }
+        pageInfo={pageInfo ?? undefined}
+        pageType={AdminPageContentEnum.ADVENTURES}
+        onCloseModal={closeModalHandler}
+        onOpenModal={openModalHandler}
+        modalDisplayed={isModalDisplayed}
+        isDataReturned={isDataReturned}
+        dataFromDB={rpgData}
+        headers={rolePlayingGameHeaders}
+        onRowSelect={rowSelectedHandler}
+        onDelete={deleteDataHanlder}
+        onUpdate={updateDataHandler}
+        onCreate={addDataHandler}
+        onPageNumberChange={pageNumberHandler}
+        onPageSizeChange={pageSizeHandler}
+      />
+    );
+  };
+
+  const getBooksPageContent = () => {
+    return (
+      <AdminContent
+        title={
+          adminPages.get(AdminPageContentEnum.BOOKS)?.title ?? 'Missing Title'
+        }
+        pageInfo={pageInfo ?? undefined}
+        pageType={AdminPageContentEnum.BOOKS}
+        onCloseModal={closeModalHandler}
+        onOpenModal={openModalHandler}
+        modalDisplayed={isModalDisplayed}
+        isDataReturned={isDataReturned}
+        dataFromDB={rpgData}
+        headers={rolePlayingGameHeaders}
+        onRowSelect={rowSelectedHandler}
+        onDelete={deleteDataHanlder}
+        onUpdate={updateDataHandler}
+        onCreate={addDataHandler}
+        onPageNumberChange={pageNumberHandler}
+        onPageSizeChange={pageSizeHandler}
+      />
+    );
+  };
+
+  const getAdventuresPageContent = () => {
+    return (
+      <AdminContent
+        title={
+          adminPages.get(AdminPageContentEnum.ADVENTURES)?.title ??
+          'Missing Title'
+        }
+        pageInfo={pageInfo ?? undefined}
+        pageType={AdminPageContentEnum.ADVENTURES}
+        onCloseModal={closeModalHandler}
+        onOpenModal={openModalHandler}
+        modalDisplayed={isModalDisplayed}
+        isDataReturned={isDataReturned}
+        dataFromDB={rpgData}
+        headers={rolePlayingGameHeaders}
+        onRowSelect={rowSelectedHandler}
+        onDelete={deleteDataHanlder}
+        onUpdate={updateDataHandler}
+        onCreate={addDataHandler}
+        onPageNumberChange={pageNumberHandler}
+        onPageSizeChange={pageSizeHandler}
+      />
+    );
+  };
 
   return (
     <div className="grid grid-cols-6 h-full">
