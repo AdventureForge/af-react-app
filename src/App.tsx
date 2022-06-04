@@ -26,7 +26,7 @@ const App = () => {
           <Routes>
             {/* PUBLIC ROUTES */}
             <Route
-              path="/"
+              index
               element={
                 <Suspense fallback={<Loader />}>
                   <Home />
@@ -42,7 +42,7 @@ const App = () => {
                 </Suspense>
               }
             >
-              <Route path="/account" element={<UserAccount />} />
+              <Route path="account" element={<UserAccount />} />
             </Route>
             <Route
               element={
@@ -51,12 +51,14 @@ const App = () => {
                 </Suspense>
               }
             >
-              <Route path="/admin" element={<Admin />} />
+              <Route path="admin" element={<Admin />}>
+                <Route path=":adminSubPage" element={<Admin />} />
+              </Route>
             </Route>
 
             {/* Not found */}
             <Route
-              path="/unauthorized"
+              path="unauthorized"
               element={
                 <Suspense fallback={<Loader />}>
                   <Unauthorized />
