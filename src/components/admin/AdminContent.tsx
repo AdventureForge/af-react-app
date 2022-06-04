@@ -1,13 +1,23 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { Column } from 'react-table';
 import { AdminPageContentEnum } from '../../pages/Admin';
-import { BaseEntity, PageInfo } from '../../types/domain';
+import {
+  BaseEntity,
+  PageInfo,
+  Publisher,
+  RolePlayingGame,
+} from '../../types/domain';
 import PublisherForm from '../forms/PublisherForm';
 import RolePlayingGameForm from '../forms/RolePlayingGameForm';
 import Section from '../layout/Section';
 import Table from '../table/Table';
 import Button from '../ui/Button';
 import Modal from '../ui/Modal';
+
+export enum ModalMode {
+  CREATE,
+  UPDATE,
+}
 
 type AdminContentProps = {
   title: string;
@@ -28,26 +38,49 @@ type AdminContentProps = {
 const AdminContent: React.FC<AdminContentProps> = (props) => {
   const data = useMemo(() => [...props.dataFromDB], [props.dataFromDB]);
   const columns: Column<object>[] = useMemo(() => props.headers, []);
+  const [modalMode, setModalMode] = useState<ModalMode>(ModalMode.CREATE);
+  const [dataToUpdate, setDataToUpdate] = useState<object>();
 
   const getForm = () => {
     switch (props.pageType) {
       case AdminPageContentEnum.PUBLISHERS:
         return (
           <PublisherForm
-            onConfirm={props.onCreate}
+            mode={modalMode}
+            onConfirm={
+              modalMode === ModalMode.CREATE ? props.onCreate : props.onUpdate
+            }
             onCancel={props.onCloseModal}
+            dataToUpdate={dataToUpdate as Publisher}
           />
         );
       case AdminPageContentEnum.ROLEPLAYINGGAMES:
         return (
           <RolePlayingGameForm
-            onConfirm={props.onCreate}
+            mode={modalMode}
+            onConfirm={
+              modalMode === ModalMode.CREATE ? props.onCreate : props.onUpdate
+            }
             onCancel={props.onCloseModal}
+            dataToUpdate={dataToUpdate as RolePlayingGame}
           />
         );
       default:
         break;
     }
+  };
+
+  const openModalCreateHandler = () => {
+    setModalMode(ModalMode.CREATE);
+    props.onOpenModal();
+  };
+
+  const openModalUpdateHandler = (data: object) => {
+    setModalMode(ModalMode.UPDATE);
+    setDataToUpdate(data);
+    console.log(data);
+
+    props.onOpenModal();
   };
 
   return (
@@ -60,9 +93,10 @@ const AdminContent: React.FC<AdminContentProps> = (props) => {
           </h1>
         </div>
         <Button
+          id="btnCreate"
           value={`new ${props.title}`}
           className="w-64"
-          onClick={props.onOpenModal}
+          onClick={openModalCreateHandler}
           style="plain"
           color="accent"
         />
@@ -82,6 +116,7 @@ const AdminContent: React.FC<AdminContentProps> = (props) => {
           pageInfo={props.pageInfo}
           onRowSelect={props.onRowSelect}
           onDelete={props.onDelete}
+          onEdit={openModalUpdateHandler}
         />
       )}
     </Section>

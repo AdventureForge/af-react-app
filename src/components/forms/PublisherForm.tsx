@@ -4,6 +4,7 @@ import Button from '../ui/Button';
 import Input from './FormElements/Input';
 import TextArea from '../forms/FormElements/TextArea';
 import { BaseEntity, Publisher } from '../../types/domain';
+import { ModalMode } from '../admin/AdminContent';
 
 export interface IPublisherForm {
   name: string;
@@ -15,6 +16,8 @@ export interface IPublisherForm {
 type Props = {
   onConfirm: <T extends BaseEntity>(t: T) => void;
   onCancel: () => void;
+  mode: ModalMode;
+  dataToUpdate?: Publisher;
 };
 
 const PublisherForm: React.FC<Props> = (props) => {
@@ -25,19 +28,22 @@ const PublisherForm: React.FC<Props> = (props) => {
   } = useForm<IPublisherForm>();
 
   const onSubmit: SubmitHandler<IPublisherForm> = (data) => {
-    const newPublisher: Publisher = {
+    const publisher: Publisher = {
+      uuid: props.dataToUpdate?.uuid,
       name: data.name,
       description: data.description,
       websiteUrl: data['website url'],
       logo: data['logo url'],
     };
-    props.onConfirm<Publisher>(newPublisher);
+    props.onConfirm<Publisher>(publisher);
   };
 
   return (
     <div className="px-28 overflow-y-auto">
       <h2 className="text-3xl font-semibold block border-l-[40px] pl-4 border-cyan-500">
-        Add a new publisher
+        {props.mode === ModalMode.CREATE
+          ? 'Add a new publisher'
+          : `Update publisher: ${props.dataToUpdate?.uuid}`}
       </h2>
       <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
         <Input<IPublisherForm>
@@ -47,6 +53,11 @@ const PublisherForm: React.FC<Props> = (props) => {
           required={true}
           errors={errors.name}
           errorMessage="Publisher name is required"
+          defaultValue={
+            props.mode === ModalMode.UPDATE
+              ? props.dataToUpdate?.name
+              : undefined
+          }
         />
 
         <Input<IPublisherForm>
@@ -57,6 +68,11 @@ const PublisherForm: React.FC<Props> = (props) => {
           pattern={urlValidationPattern}
           errors={errors['website url']}
           errorMessage="This is not a valid url"
+          defaultValue={
+            props.mode === ModalMode.UPDATE
+              ? props.dataToUpdate?.websiteUrl
+              : undefined
+          }
         />
 
         <TextArea<IPublisherForm>
@@ -64,6 +80,11 @@ const PublisherForm: React.FC<Props> = (props) => {
           placeholder="Enter the publisher description here..."
           register={register}
           required={false}
+          defaultValue={
+            props.mode === ModalMode.UPDATE
+              ? props.dataToUpdate?.description
+              : undefined
+          }
         />
 
         <Input<IPublisherForm>
@@ -74,6 +95,11 @@ const PublisherForm: React.FC<Props> = (props) => {
           pattern={urlValidationPattern}
           errors={errors['logo url']}
           errorMessage="This is not a valid url"
+          defaultValue={
+            props.mode === ModalMode.UPDATE
+              ? props.dataToUpdate?.logo
+              : undefined
+          }
         />
 
         <div className="flex gap-5 place-content-end mt-10">
@@ -83,7 +109,11 @@ const PublisherForm: React.FC<Props> = (props) => {
             style="danger-outline"
             onClick={props.onCancel}
           />
-          <Button type="submit" value="save" style="plain" />
+          <Button
+            type="submit"
+            value={props.mode === ModalMode.CREATE ? 'create' : 'update'}
+            style="plain"
+          />
         </div>
       </form>
     </div>

@@ -10,6 +10,7 @@ interface InputProps<T> {
   errors?: FieldError | undefined;
   errorMessage?: string;
   placeholder?: string;
+  defaultValue?: string;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-constraint
@@ -21,6 +22,7 @@ const TextArea = <T extends unknown>({
   errors,
   errorMessage,
   placeholder,
+  defaultValue,
 }: InputProps<T>) => {
   const classes = classNames(
     'border-2',
@@ -50,6 +52,7 @@ const TextArea = <T extends unknown>({
         placeholder={placeholder}
         {...register(label, { required, pattern })}
         className={`${classes}`}
+        defaultValue={defaultValue}
       />
       {errors && <FormErrorMessage>{errorMessage}</FormErrorMessage>}
     </div>

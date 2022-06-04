@@ -24,6 +24,7 @@ type TableProps = {
   pageInfo?: PageInfo;
   onRowSelect: (row: (string | undefined)[]) => void;
   onDelete: () => void;
+  onEdit: (data: object) => void;
 };
 
 const Table: React.FC<TableProps> = ({
@@ -32,6 +33,7 @@ const Table: React.FC<TableProps> = ({
   pageInfo,
   onRowSelect,
   onDelete,
+  onEdit,
 }) => {
   const instance = useTable(
     {
@@ -74,7 +76,7 @@ const Table: React.FC<TableProps> = ({
           Cell: (table) => (
             <PencilAltIcon
               className="w-5 hover:text-violet-500 cursor-pointer"
-              onClick={() => console.log(table.data[table.row.id])}
+              onClick={() => editDataHandler(table.data[table.row.id])}
             />
           ),
         },
@@ -100,6 +102,10 @@ const Table: React.FC<TableProps> = ({
     selectedFlatRows,
     state: { pageIndex, pageSize },
   } = instance;
+
+  const editDataHandler = (data: object) => {
+    onEdit(data);
+  };
 
   useEffect(() => {
     const selectedPublishesUuids = selectedFlatRows

@@ -2,7 +2,8 @@ import classNames from 'classnames';
 import React from 'react';
 
 type Props = {
-  onClick?: () => void;
+  id?: string;
+  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
   children?: React.ReactNode;
   color?: 'primary' | 'secondary' | 'accent';
   disabled?: boolean;
@@ -33,6 +34,7 @@ const Button: React.FC<Props> = (props) => {
   );
   return (
     <button
+      id={props.id}
       value={props.value}
       type={props.type ?? 'button'}
       className={`${defaultClasses} ${props.className}`}

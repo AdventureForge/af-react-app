@@ -3,7 +3,8 @@ import { urlValidationPattern } from '../../utils/patterns';
 import Button from '../ui/Button';
 import Input from './FormElements/Input';
 import TextArea from '../forms/FormElements/TextArea';
-import { BaseEntity, Publisher, RolePlayingGame } from '../../types/domain';
+import { BaseEntity, RolePlayingGame } from '../../types/domain';
+import { ModalMode } from '../admin/AdminContent';
 
 export interface IRolePlayingGameForm {
   title: string;
@@ -16,6 +17,8 @@ export interface IRolePlayingGameForm {
 type Props = {
   onConfirm: <T extends BaseEntity>(t: T) => void;
   onCancel: () => void;
+  mode: ModalMode;
+  dataToUpdate?: RolePlayingGame;
 };
 
 const RolePlayingGameForm: React.FC<Props> = (props) => {
@@ -26,19 +29,25 @@ const RolePlayingGameForm: React.FC<Props> = (props) => {
   } = useForm<IRolePlayingGameForm>();
 
   const onSubmit: SubmitHandler<IRolePlayingGameForm> = (data) => {
-    const newRolePlayingGame: RolePlayingGame = {
+    const rolePlayingGame: RolePlayingGame = {
+      uuid: props.dataToUpdate?.uuid,
       title: data.title,
       subtitle: data.subtitle,
       description: data.description,
       pictureUrl: data['picture url'],
       websiteUrl: data['website url'],
     };
-    props.onConfirm<RolePlayingGame>(newRolePlayingGame);
+    props.onConfirm<RolePlayingGame>(rolePlayingGame);
   };
 
   return (
     <div className="px-28 overflow-y-auto">
-      <h2 className="text-3xl font-semibold">Add a New Roleplaying Game</h2>
+      <h2 className="text-3xl font-semibold">
+        {' '}
+        {props.mode === ModalMode.CREATE
+          ? 'Add a New Roleplaying Game'
+          : `Update Roleplaying Game: ${props.dataToUpdate?.uuid}`}
+      </h2>
       <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
         <Input<IRolePlayingGameForm>
           label="title"
@@ -47,6 +56,11 @@ const RolePlayingGameForm: React.FC<Props> = (props) => {
           required={true}
           errors={errors.title}
           errorMessage="RolePlaying Game Title is required"
+          defaultValue={
+            props.mode === ModalMode.UPDATE
+              ? props.dataToUpdate?.title
+              : undefined
+          }
         />
 
         <Input<IRolePlayingGameForm>
@@ -56,6 +70,11 @@ const RolePlayingGameForm: React.FC<Props> = (props) => {
           required={false}
           errors={errors.subtitle}
           errorMessage="RolePlaying Game Subtitle is required"
+          defaultValue={
+            props.mode === ModalMode.UPDATE
+              ? props.dataToUpdate?.subtitle
+              : undefined
+          }
         />
 
         <TextArea<IRolePlayingGameForm>
@@ -63,6 +82,11 @@ const RolePlayingGameForm: React.FC<Props> = (props) => {
           placeholder="Enter the publisher description here..."
           register={register}
           required={false}
+          defaultValue={
+            props.mode === ModalMode.UPDATE
+              ? props.dataToUpdate?.description
+              : undefined
+          }
         />
 
         <Input<IRolePlayingGameForm>
@@ -73,6 +97,11 @@ const RolePlayingGameForm: React.FC<Props> = (props) => {
           pattern={urlValidationPattern}
           errors={errors['picture url']}
           errorMessage="This is not a valid url"
+          defaultValue={
+            props.mode === ModalMode.UPDATE
+              ? props.dataToUpdate?.pictureUrl
+              : undefined
+          }
         />
 
         <Input<IRolePlayingGameForm>
@@ -83,6 +112,11 @@ const RolePlayingGameForm: React.FC<Props> = (props) => {
           pattern={urlValidationPattern}
           errors={errors['website url']}
           errorMessage="This is not a valid url"
+          defaultValue={
+            props.mode === ModalMode.UPDATE
+              ? props.dataToUpdate?.websiteUrl
+              : undefined
+          }
         />
 
         <div className="flex gap-5 place-content-end mt-10">
@@ -92,7 +126,11 @@ const RolePlayingGameForm: React.FC<Props> = (props) => {
             style="danger-outline"
             onClick={props.onCancel}
           />
-          <Button type="submit" value="save" style="plain" />
+          <Button
+            type="submit"
+            value={props.mode === ModalMode.CREATE ? 'create' : 'update'}
+            style="plain"
+          />
         </div>
       </form>
     </div>
