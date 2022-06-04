@@ -8,11 +8,11 @@ type Props = {
 
 const PageLayout: React.FC<Props> = (props) => {
   return (
-    <>
+    <div className="relative min-h-screen grid-flow-col pb-96">
       <MainHeader />
-      <main>{props.children}</main>
+      {props.children}
       <MainFooter />
-    </>
+    </div>
   );
 };
 

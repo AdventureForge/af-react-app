@@ -8,7 +8,7 @@ import CircleIcon from '../ui/CircleIcon';
 const MainFooter = () => {
   const { keycloak, initialized } = useKeycloak();
   return (
-    <footer className="text-center bg-zinc-900 text-white z-10 relative">
+    <footer className="text-center bg-zinc-900 text-white z-10 absolute bottom-0 w-full h-96">
       <div className="container px-6 pt-6 m-auto">
         <div className="flex justify-center mb-6">
           <CircleIcon link="https://www.linkedin.com/in/morgan-lombard-37502976/">
