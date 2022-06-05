@@ -28,6 +28,7 @@ const PublisherForm: React.FC<Props> = (props) => {
   } = useForm<IPublisherForm>();
 
   const onSubmit: SubmitHandler<IPublisherForm> = (data) => {
+    console.log(data);
     const publisher: Publisher = {
       uuid: props.dataToUpdate?.uuid,
       name: data.name,

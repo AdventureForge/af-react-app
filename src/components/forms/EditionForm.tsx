@@ -33,7 +33,11 @@ const EditionForm: React.FC<Props> = (props) => {
   const axiosInstance = useAxios();
 
   useEffect(() => {
-    setRpgSelected(rolePlayingGamesList[0]);
+    setRpgSelected(
+      rolePlayingGamesList.find(
+        (rpg) => rpg.uuid === props.dataToUpdate?.rolePlayingGameUuid
+      ) ?? rolePlayingGamesList[0]
+    );
   }, [rolePlayingGamesList]);
 
   useEffect(() => {

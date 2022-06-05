@@ -120,12 +120,10 @@ const Table: React.FC<TableProps> = ({
   }, [selectedFlatRows]);
 
   useEffect(() => {
-    console.log('change page number');
     onPageNumberChange(pageIndex);
   }, [pageIndex]);
 
   useEffect(() => {
-    console.log('change page size');
     onPageSizeChange(pageSize);
   }, [pageSize]);
 

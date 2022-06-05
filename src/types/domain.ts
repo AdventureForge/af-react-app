@@ -40,6 +40,7 @@ export interface Collection extends BaseEntity {
   description?: string;
   editionUuid?: string;
   publisherUuid?: string;
+  rolePlayingGameUuid?: string;
 }
 
 export interface Book extends BaseEntity {

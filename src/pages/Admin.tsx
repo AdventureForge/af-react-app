@@ -108,11 +108,9 @@ const Admin = () => {
         .get(`${apiUrl}?page=${pageNumber}&size=${pageSize}`)
         .then((response) => {
           if (response.data.length == 0) {
-            console.log('no data');
             setPageInfo(response.data.pageInfo);
             setDataReturned(false);
           } else {
-            console.log(response.data);
             setDataReturned(true);
 
             adminSubPage === AdminPageContentEnum.PUBLISHERS &&
@@ -131,26 +129,23 @@ const Admin = () => {
           }
         })
         .catch((error) => {
-          console.log(error.response);
+          console.log(error.response.data);
         })
         .finally(() => {
-          console.log('end fetch');
           setIsLoading(false);
         }),
     [adminSubPage, pageNumber, pageSize]
   );
 
-  const addDataHandler = <T,>(t: T) => {
+  const addDataHandler = <T extends BaseEntity>(t: T) => {
     console.log('ADD');
     console.log(t);
     setModalDisplayed(false);
     !!axiosInstance.current &&
       axiosInstance.current
         .post(apiUrl, t)
-        .then((response) => console.log(response))
         .then(() => fetchData())
         .catch((error) => {
-          console.log(error);
           console.log(error.response.data);
         });
   };
@@ -163,16 +158,15 @@ const Admin = () => {
         .delete(apiUrl, {
           data: rowsSelected,
         })
-        .then((response) => console.log(response))
         .then(() => fetchData())
         .catch((error) => {
-          console.log(error);
           console.log(error.response.data);
         });
   };
 
   const updateDataHandler = <T extends BaseEntity>(t: T) => {
     console.log('UPDATE');
+    console.log(t);
     setModalDisplayed(false);
     !!axiosInstance.current &&
       axiosInstance.current
@@ -180,7 +174,6 @@ const Admin = () => {
         .then((response) => console.log(response))
         .then(() => fetchData())
         .catch((error) => {
-          console.log(error);
           console.log(error.response.data);
         });
   };
@@ -193,26 +186,17 @@ const Admin = () => {
   };
 
   const pageNumberHandler = (pageNumberParam: number) => {
-    console.log('page number admin ' + pageNumberParam);
     setPageNumber((_) => pageNumberParam);
   };
   const pageSizeHandler = (pageSizeParam: number) => {
-    console.log('page size admin ' + pageSizeParam);
     setPageSize((_) => pageSizeParam);
   };
 
   const rowSelectedHandler = (rows: (string | undefined)[]) => {
-    setRowsSelected((prev) => {
-      console.log('previous rows:');
-      console.log(prev);
-      console.log('new rows:');
-      console.log(rows);
-      return rows;
-    });
+    setRowsSelected((prev) => rows);
   };
 
   const renderPage = () => {
-    console.log('swich url');
     switch (adminSubPage) {
       case AdminPageContentEnum.PUBLISHERS:
         return getPublisherPageContent();
