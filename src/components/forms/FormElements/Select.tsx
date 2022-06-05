@@ -1,5 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import classNames from 'classnames';
-import React, { ReactEventHandler } from 'react';
 import { FieldError, Path, UseFormRegister } from 'react-hook-form';
 import FormErrorMessage from './FormErrorMessage';
 
