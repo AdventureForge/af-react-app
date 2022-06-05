@@ -3,10 +3,12 @@ import { Column } from 'react-table';
 import { AdminPageContentEnum } from '../../pages/Admin';
 import {
   BaseEntity,
+  Edition,
   PageInfo,
   Publisher,
   RolePlayingGame,
 } from '../../types/domain';
+import EditionForm from '../forms/EditionForm';
 import PublisherForm from '../forms/PublisherForm';
 import RolePlayingGameForm from '../forms/RolePlayingGameForm';
 import Section from '../layout/Section';
@@ -65,6 +67,17 @@ const AdminContent: React.FC<AdminContentProps> = (props) => {
             }
             onCancel={props.onCloseModal}
             dataToUpdate={dataToUpdate as RolePlayingGame}
+          />
+        );
+      case AdminPageContentEnum.EDITIONS:
+        return (
+          <EditionForm
+            mode={modalMode}
+            onConfirm={
+              modalMode === ModalMode.CREATE ? props.onCreate : props.onUpdate
+            }
+            onCancel={props.onCloseModal}
+            dataToUpdate={dataToUpdate as Edition}
           />
         );
       default:

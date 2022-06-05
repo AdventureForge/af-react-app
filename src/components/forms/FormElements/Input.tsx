@@ -12,7 +12,7 @@ interface InputProps<T> {
   errorMessage?: string;
   type?: React.HTMLInputTypeAttribute;
   placeholder?: string;
-  defaultValue?: string;
+  defaultValue?: string | number;
   onChange?: (event: ReactEventHandler) => void;
 }
 

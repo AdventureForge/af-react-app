@@ -1,8 +1,10 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useState, useEffect, useCallback } from 'react';
 import SideNavBar from '../components/layout/SideNavBar';
 import useAxios from '../hooks/useAxios';
 import {
   BaseEntity,
+  Edition,
   PageInfo,
   Publisher,
   RolePlayingGame,
@@ -10,6 +12,7 @@ import {
 import Loader from '../components/ui/Loader';
 import AdminContent from '../components/admin/AdminContent';
 import {
+  editionHeaders,
   publisherHeaders,
   rolePlayingGameHeaders,
 } from '../types/table-headers';
@@ -18,6 +21,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 export enum AdminPageContentEnum {
   PUBLISHERS = 'publishers',
   ROLEPLAYINGGAMES = 'roleplayinggames',
+  EDITIONS = 'editions',
   COLLECTIONS = 'collections',
   AUTHORS = 'authors',
   BOOKS = 'books',
@@ -40,6 +44,11 @@ adminPages.set('roleplayinggames', {
   title: 'Roleplaying Games',
   page: 'roleplayinggames',
   url: 'games/roleplayinggames',
+} as PageContent);
+adminPages.set('editions', {
+  title: 'Editions',
+  page: 'editions',
+  url: 'games/editions',
 } as PageContent);
 adminPages.set('collections', {
   title: 'Collections',
@@ -68,6 +77,7 @@ const Admin = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [publisherData, setPublisherData] = useState<Publisher[]>([]);
   const [rpgData, setRpgData] = useState<RolePlayingGame[]>([]);
+  const [editionData, setEditionData] = useState<Edition[]>([]);
   const [pageInfo, setPageInfo] = useState<PageInfo | null>(null);
   const [pageNumber, setPageNumber] = useState(0);
   const [pageSize, setPageSize] = useState(20);
@@ -101,12 +111,16 @@ const Admin = () => {
           } else {
             console.log(response.data);
             setDataReturned(true);
+
             adminSubPage === AdminPageContentEnum.PUBLISHERS &&
-              // eslint-disable-next-line @typescript-eslint/no-unused-vars
               setPublisherData((_) => response.data.data);
+
             adminSubPage === AdminPageContentEnum.ROLEPLAYINGGAMES &&
-              // eslint-disable-next-line @typescript-eslint/no-unused-vars
               setRpgData((_) => response.data.data);
+
+            adminSubPage === AdminPageContentEnum.EDITIONS &&
+              setEditionData((_) => response.data.data);
+
             setPageInfo(response.data.pageInfo);
           }
         })
@@ -198,6 +212,8 @@ const Admin = () => {
         return getPublisherPageContent();
       case AdminPageContentEnum.ROLEPLAYINGGAMES:
         return getRoleplyingGamesPageContent();
+      case AdminPageContentEnum.EDITIONS:
+        return getEditionsPageContent();
       case AdminPageContentEnum.COLLECTIONS:
         return getCollectionsPageContent();
       case AdminPageContentEnum.AUTHORS:
@@ -253,6 +269,31 @@ const Admin = () => {
         isDataReturned={isDataReturned}
         dataFromDB={rpgData}
         headers={rolePlayingGameHeaders}
+        onRowSelect={rowSelectedHandler}
+        onDelete={deleteDataHanlder}
+        onUpdate={updateDataHandler}
+        onCreate={addDataHandler}
+        onPageNumberChange={pageNumberHandler}
+        onPageSizeChange={pageSizeHandler}
+      />
+    );
+  };
+
+  const getEditionsPageContent = () => {
+    return (
+      <AdminContent
+        title={
+          adminPages.get(AdminPageContentEnum.EDITIONS)?.title ??
+          'Missing Title'
+        }
+        pageInfo={pageInfo ?? undefined}
+        pageType={AdminPageContentEnum.EDITIONS}
+        onCloseModal={closeModalHandler}
+        onOpenModal={openModalHandler}
+        modalDisplayed={isModalDisplayed}
+        isDataReturned={isDataReturned}
+        dataFromDB={editionData}
+        headers={editionHeaders}
         onRowSelect={rowSelectedHandler}
         onDelete={deleteDataHanlder}
         onUpdate={updateDataHandler}

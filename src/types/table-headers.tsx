@@ -97,3 +97,44 @@ export const rolePlayingGameHeaders: Column<IRolePlayingGameHeaderTypes>[] = [
     accessor: 'lastModified',
   },
 ];
+
+export interface IEditionHeaderTypes extends BaseEntity {
+  editionNumber?: number;
+  editionTitle?: string;
+  rolePlayingGameUuid?: string;
+}
+
+export const editionHeaders: Column<IEditionHeaderTypes>[] = [
+  {
+    Header: 'Uuid',
+    accessor: 'uuid',
+  },
+  {
+    Header: 'Title',
+    accessor: 'editionNumber',
+  },
+  {
+    Header: 'Edition title',
+    accessor: 'editionTitle',
+  },
+  {
+    Header: 'Rpg uuid',
+    accessor: 'rolePlayingGameUuid',
+  },
+  {
+    Header: 'User Created',
+    accessor: 'userCreated',
+  },
+  {
+    Header: 'Date Created',
+    accessor: 'dateCreated',
+  },
+  {
+    Header: 'User Modified',
+    accessor: 'userModified',
+  },
+  {
+    Header: 'Last Modified',
+    accessor: 'lastModified',
+  },
+];

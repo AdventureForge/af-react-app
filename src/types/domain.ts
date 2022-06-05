@@ -19,31 +19,25 @@ export interface Publisher extends BaseEntity {
   websiteUrl?: string;
   description?: string;
   logo?: string;
-  collections?: Collection[];
 }
 
 export interface RolePlayingGame extends BaseEntity {
-  title: string;
+  title?: string;
   subtitle?: string;
   description?: string;
   pictureUrl?: string;
   websiteUrl?: string;
-  editions?: Edition[];
 }
 
 export interface Edition extends BaseEntity {
   editionNumber: number;
   editionTitle: string;
-  rolePlayingGames: RolePlayingGame[];
-  collections?: Collection[];
+  rolePlayingGameUuid: string;
 }
 
 export interface Collection extends BaseEntity {
   title: string;
   description?: string;
-  editions: Edition[];
-  publishers: Publisher[];
-  books?: Book[];
 }
 
 export interface Book extends BaseEntity {
@@ -54,17 +48,16 @@ export interface Book extends BaseEntity {
   language?: string;
   isbn: string;
   authors: Author[];
-  collections: Collection[];
+  collections: Collection;
   category: Category;
-  publishers?: Publisher[];
-  rolePlayingGames?: RolePlayingGame[];
-  editions?: Edition[];
+  publishers?: Publisher;
+  rolePlayingGames?: RolePlayingGame;
+  editions?: Edition;
 }
 
 export interface Author extends BaseEntity {
   firstname: string;
   lastname: string;
-  books: Book[];
 }
 
 export interface PageInfo {
