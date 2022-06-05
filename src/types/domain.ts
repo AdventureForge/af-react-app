@@ -38,6 +38,8 @@ export interface Edition extends BaseEntity {
 export interface Collection extends BaseEntity {
   title: string;
   description?: string;
+  editionUuid?: string;
+  publisherUuid?: string;
 }
 
 export interface Book extends BaseEntity {

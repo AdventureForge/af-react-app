@@ -138,3 +138,49 @@ export const editionHeaders: Column<IEditionHeaderTypes>[] = [
     accessor: 'lastModified',
   },
 ];
+
+export interface ICollectionHeaderTypes extends BaseEntity {
+  title?: string;
+  description?: string;
+  editionUuid?: string;
+  publisherUuid?: string;
+}
+
+export const collectionHeaders: Column<ICollectionHeaderTypes>[] = [
+  {
+    Header: 'Uuid',
+    accessor: 'uuid',
+  },
+  {
+    Header: 'Title',
+    accessor: 'title',
+  },
+  {
+    Header: 'Description',
+    accessor: 'description',
+  },
+  {
+    Header: 'Edition uuid',
+    accessor: 'editionUuid',
+  },
+  {
+    Header: 'Publisher uuid',
+    accessor: 'publisherUuid',
+  },
+  {
+    Header: 'User Created',
+    accessor: 'userCreated',
+  },
+  {
+    Header: 'Date Created',
+    accessor: 'dateCreated',
+  },
+  {
+    Header: 'User Modified',
+    accessor: 'userModified',
+  },
+  {
+    Header: 'Last Modified',
+    accessor: 'lastModified',
+  },
+];

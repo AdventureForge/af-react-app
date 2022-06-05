@@ -8,10 +8,12 @@ import {
   PageInfo,
   Publisher,
   RolePlayingGame,
+  Collection,
 } from '../types/domain';
 import Loader from '../components/ui/Loader';
 import AdminContent from '../components/admin/AdminContent';
 import {
+  collectionHeaders,
   editionHeaders,
   publisherHeaders,
   rolePlayingGameHeaders,
@@ -78,15 +80,16 @@ const Admin = () => {
   const [publisherData, setPublisherData] = useState<Publisher[]>([]);
   const [rpgData, setRpgData] = useState<RolePlayingGame[]>([]);
   const [editionData, setEditionData] = useState<Edition[]>([]);
+  const [collectionData, setCollectionData] = useState<Collection[]>([]);
   const [pageInfo, setPageInfo] = useState<PageInfo | null>(null);
   const [pageNumber, setPageNumber] = useState(0);
   const [pageSize, setPageSize] = useState(20);
   const [rowsSelected, setRowsSelected] = useState<(string | undefined)[]>([]);
   const axiosInstance = useAxios();
   const { adminSubPage } = useParams();
+  const navigate = useNavigate();
   const apiUrl =
     adminPages.get(adminSubPage ?? AdminPageContentEnum.PUBLISHERS)?.url ?? '';
-  const navigate = useNavigate();
 
   useEffect(() => {
     setIsLoading(true);
@@ -120,6 +123,9 @@ const Admin = () => {
 
             adminSubPage === AdminPageContentEnum.EDITIONS &&
               setEditionData((_) => response.data.data);
+
+            adminSubPage === AdminPageContentEnum.COLLECTIONS &&
+              setCollectionData((_) => response.data.data);
 
             setPageInfo(response.data.pageInfo);
           }
@@ -317,8 +323,8 @@ const Admin = () => {
         onOpenModal={openModalHandler}
         modalDisplayed={isModalDisplayed}
         isDataReturned={isDataReturned}
-        dataFromDB={rpgData}
-        headers={rolePlayingGameHeaders}
+        dataFromDB={collectionData}
+        headers={collectionHeaders}
         onRowSelect={rowSelectedHandler}
         onDelete={deleteDataHanlder}
         onUpdate={updateDataHandler}

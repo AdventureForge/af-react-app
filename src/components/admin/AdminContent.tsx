@@ -7,7 +7,9 @@ import {
   PageInfo,
   Publisher,
   RolePlayingGame,
+  Collection,
 } from '../../types/domain';
+import CollectionForm from '../forms/CollectionForm';
 import EditionForm from '../forms/EditionForm';
 import PublisherForm from '../forms/PublisherForm';
 import RolePlayingGameForm from '../forms/RolePlayingGameForm';
@@ -80,7 +82,21 @@ const AdminContent: React.FC<AdminContentProps> = (props) => {
             dataToUpdate={dataToUpdate as Edition}
           />
         );
+
+      case AdminPageContentEnum.COLLECTIONS:
+        return (
+          <CollectionForm
+            mode={modalMode}
+            onConfirm={
+              modalMode === ModalMode.CREATE ? props.onCreate : props.onUpdate
+            }
+            onCancel={props.onCloseModal}
+            dataToUpdate={dataToUpdate as Collection}
+          />
+        );
+
       default:
+        props.onCloseModal();
         break;
     }
   };
