@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useForm, SubmitHandler } from 'react-hook-form';
 import Button from '../ui/Button';
 import Input from './FormElements/Input';
