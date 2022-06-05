@@ -1,6 +1,6 @@
 {
   "name": "af-react-app",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": true,
   "dependencies": {
     "@headlessui/react": "^1.6.1",
