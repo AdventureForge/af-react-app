@@ -2,8 +2,10 @@ import { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import SideNavBar from '../components/layout/SideNavBar';
 import Loader from '../components/ui/Loader';
+import UserPageContent from '../components/user/UserPageContent';
 import useAxios from '../hooks/useAxios';
 import { BaseEntity, PageInfo } from '../types/domain';
+import { adventureHeaders, campaignHeaders } from '../types/table-headers';
 import { PageContent } from '../types/various';
 
 export enum UserPageContentEnum {
@@ -12,7 +14,7 @@ export enum UserPageContentEnum {
 }
 
 export const userPages: Map<string, PageContent> = new Map();
-userPages.set('campaign', {
+userPages.set('campaigns', {
   title: 'Campaigns',
   page: 'campaigns',
   url: 'adventures/campaigns',
@@ -31,10 +33,10 @@ const UserSpace = () => {
   const [pageNumber, setPageNumber] = useState(0);
   const [pageSize, setPageSize] = useState(20);
   const [rowsSelected, setRowsSelected] = useState<(string | undefined)[]>([]);
-  const [campaignData, setCampaignData] = useState();
-  const [adventureData, setAdventureData] = useState();
+  const [campaignData, setCampaignData] = useState([]);
+  const [adventureData, setAdventureData] = useState([]);
   const axiosInstance = useAxios();
-  const { adminSubPage: userSubPage } = useParams();
+  const { userSubPage } = useParams();
   const navigate = useNavigate();
   const apiUrl =
     userPages.get(userSubPage ?? UserPageContentEnum.CAMPAIGNS)?.url ?? '';
@@ -146,16 +148,57 @@ const UserSpace = () => {
   };
 
   const getCampaignPageContent = () => {
-    return <p>Campaign page content</p>;
+    return (
+      <UserPageContent
+        title={
+          userPages.get(UserPageContentEnum.CAMPAIGNS)?.title ?? 'Missing Title'
+        }
+        pageInfo={pageInfo ?? undefined}
+        pageType={UserPageContentEnum.CAMPAIGNS}
+        onCloseModal={closeModalHandler}
+        onOpenModal={openModalHandler}
+        modalDisplayed={isModalDisplayed}
+        isDataReturned={isDataReturned}
+        dataFromDB={campaignData}
+        headers={campaignHeaders}
+        onRowSelect={rowSelectedHandler}
+        onDelete={deleteDataHanlder}
+        onUpdate={updateDataHandler}
+        onCreate={addDataHandler}
+        onPageNumberChange={pageNumberHandler}
+        onPageSizeChange={pageSizeHandler}
+      />
+    );
   };
   const getAdventurePageContent = () => {
-    return <p>Adventure page content</p>;
+    return (
+      <UserPageContent
+        title={
+          userPages.get(UserPageContentEnum.ADVENTURES)?.title ??
+          'Missing Title'
+        }
+        pageInfo={pageInfo ?? undefined}
+        pageType={UserPageContentEnum.ADVENTURES}
+        onCloseModal={closeModalHandler}
+        onOpenModal={openModalHandler}
+        modalDisplayed={isModalDisplayed}
+        isDataReturned={isDataReturned}
+        dataFromDB={adventureData}
+        headers={adventureHeaders}
+        onRowSelect={rowSelectedHandler}
+        onDelete={deleteDataHanlder}
+        onUpdate={updateDataHandler}
+        onCreate={addDataHandler}
+        onPageNumberChange={pageNumberHandler}
+        onPageSizeChange={pageSizeHandler}
+      />
+    );
   };
 
   return (
     <div className="grid grid-cols-6 h-full">
-      {isLoading && !isDataReturned && <Loader />}
-      {!isLoading && (
+      {isLoading && !isDataReturned && !pageInfo && <Loader />}
+      {!isLoading && (campaignData || adventureData) && (
         <>
           <SideNavBar items={userPages} />
           {renderPage()}

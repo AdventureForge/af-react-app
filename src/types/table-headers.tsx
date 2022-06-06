@@ -367,3 +367,77 @@ export const bookHeaders: Column<IBookHeaderTypes>[] = [
     width: TINY_TEXT_WIDTH,
   },
 ];
+
+export interface ICampaignHeaderTypes extends BaseEntity {
+  title?: string;
+}
+
+export const campaignHeaders: Column<ICampaignHeaderTypes>[] = [
+  {
+    Header: 'Uuid',
+    accessor: 'uuid',
+    width: UUID_WIDTH,
+  },
+  {
+    Header: 'Title',
+    accessor: 'title',
+    width: TINY_TEXT_WIDTH,
+  },
+  {
+    Header: 'User Created',
+    accessor: 'userCreated',
+    width: TINY_TEXT_WIDTH,
+  },
+  {
+    Header: 'Date Created',
+    accessor: 'dateCreated',
+    width: TINY_TEXT_WIDTH,
+  },
+  {
+    Header: 'User Modified',
+    accessor: 'userModified',
+    width: TINY_TEXT_WIDTH,
+  },
+  {
+    Header: 'Last Modified',
+    accessor: 'lastModified',
+    width: TINY_TEXT_WIDTH,
+  },
+];
+
+export interface IAdventureHeaderTypes extends BaseEntity {
+  title?: string;
+}
+
+export const adventureHeaders: Column<IAdventureHeaderTypes>[] = [
+  {
+    Header: 'Uuid',
+    accessor: 'uuid',
+    width: UUID_WIDTH,
+  },
+  {
+    Header: 'Title',
+    accessor: 'title',
+    width: TINY_TEXT_WIDTH,
+  },
+  {
+    Header: 'User Created',
+    accessor: 'userCreated',
+    width: TINY_TEXT_WIDTH,
+  },
+  {
+    Header: 'Date Created',
+    accessor: 'dateCreated',
+    width: TINY_TEXT_WIDTH,
+  },
+  {
+    Header: 'User Modified',
+    accessor: 'userModified',
+    width: TINY_TEXT_WIDTH,
+  },
+  {
+    Header: 'Last Modified',
+    accessor: 'lastModified',
+    width: TINY_TEXT_WIDTH,
+  },
+];

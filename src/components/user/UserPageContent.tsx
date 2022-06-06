@@ -86,7 +86,7 @@ const UserPageContent: React.FC<UserContentProps> = (props) => {
           No {props.title} found!{' '}
         </p>
       )}
-      {props.isDataReturned && props.dataFromDB.length > 0 && (
+      {props.isDataReturned && props.dataFromDB.length > 1000 && (
         <Table
           data={data}
           columns={columns}

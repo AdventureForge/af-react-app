@@ -29,7 +29,7 @@ const Home = () => {
               game adventure
             </p>
             <ButtonLink
-              value="Start your Adventure"
+              value="Your Journey Starts Here"
               className="mt-10"
               to="user"
             />
