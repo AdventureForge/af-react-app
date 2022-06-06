@@ -6,6 +6,7 @@ type Props = {
   children?: React.ReactNode;
   color?: 'primary' | 'secondary';
   disabled?: boolean;
+  to?: string;
   value: string;
   type?: 'submit' | 'reset' | 'button';
   style?: 'plain' | 'outline';
@@ -26,7 +27,7 @@ const ButtonLink: React.FC<Props> = (props) => {
   );
 
   return (
-    <Link to="/">
+    <Link to={props.to ?? '/'}>
       <button
         type={props.type || 'button'}
         className={`${defaultClasses} ${props.className}`}

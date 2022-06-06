@@ -1,6 +1,6 @@
 import { useKeycloak } from '@react-keycloak/web';
 import { useNavigate } from 'react-router-dom';
-import { UserCircleIcon } from '@heroicons/react/outline';
+import { BookOpenIcon, UserCircleIcon } from '@heroicons/react/outline';
 import ButtonLink from '../ui/ButtonLink';
 
 const MainHeader = () => {
@@ -42,6 +42,9 @@ const MainHeader = () => {
       )}
       {initialized && keycloak.authenticated && (
         <div className="flex">
+          <ButtonLink value="Your adventures" className="mr-4" to="user">
+            <BookOpenIcon className="w-5 inline-block" />
+          </ButtonLink>
           <ButtonLink
             value={keycloak?.tokenParsed?.preferred_username}
             className="mr-4"

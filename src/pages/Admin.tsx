@@ -23,6 +23,7 @@ import {
   rolePlayingGameHeaders,
 } from '../types/table-headers';
 import { useNavigate, useParams } from 'react-router-dom';
+import { PageContent } from '../types/various';
 
 export enum AdminPageContentEnum {
   PUBLISHERS = 'publishers',
@@ -32,12 +33,6 @@ export enum AdminPageContentEnum {
   AUTHORS = 'authors',
   BOOKS = 'books',
   ADVENTURES = 'adventures',
-}
-
-export interface PageContent {
-  title: string;
-  page: string;
-  url: string;
 }
 
 export const adminPages: Map<string, PageContent> = new Map();

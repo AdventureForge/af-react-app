@@ -67,30 +67,24 @@ const MainFooter = () => {
 
         <div className="grid lg:grid-cols-4 md:grid-cols-2">
           <div className="mb-6">
-            <h5 className="uppercase font-bold mb-2.5">Links</h5>
+            {initialized && keycloak.hasRealmRole('USER') && (
+              <>
+                <h5 className="uppercase font-bold mb-2.5">Your Pages</h5>
 
-            <ul className="list-none mb-0">
-              <li>
-                <a href="#!" className="text-white">
-                  Link 1
-                </a>
-              </li>
-              <li>
-                <a href="#!" className="text-white">
-                  Link 2
-                </a>
-              </li>
-              <li>
-                <a href="#!" className="text-white">
-                  Link 3
-                </a>
-              </li>
-              <li>
-                <a href="#!" className="text-white">
-                  Link 4
-                </a>
-              </li>
-            </ul>
+                <ul className="list-none mb-0">
+                  <li>
+                    <Link to="/user/campaigns" className="text-white">
+                      my campaigns
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/user/adventures" className="text-white">
+                      my adventures
+                    </Link>
+                  </li>
+                </ul>
+              </>
+            )}
           </div>
 
           <div className="mb-6"></div>
@@ -112,7 +106,7 @@ const MainFooter = () => {
         </div>
       </div>
 
-      <div className="text-center p-4 bg-black">
+      <div className="text-center p-4 bg-black absolute bottom-0 left-0 right-0">
         © 2022{' '}
         <a className="text-white" href="https://github.com/AdventureForge">
           Adventure Forge

@@ -1,4 +1,4 @@
-import { PageContent } from '../../pages/Admin';
+import { PageContent } from '../../types/various';
 import SideNavItem from './SideNavItem';
 
 type Props = {

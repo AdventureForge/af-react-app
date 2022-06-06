@@ -9,7 +9,7 @@ const Home = lazy(() => import('./pages/Home'));
 const Admin = lazy(() => import('./pages/Admin'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 const Unauthorized = lazy(() => import('./pages/Unauthorized'));
-const UserAccount = lazy(() => import('./pages/UserAccount'));
+const UserSpace = lazy(() => import('./pages/UserSpace'));
 
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -42,8 +42,11 @@ const App = () => {
                 </Suspense>
               }
             >
-              <Route path="account" element={<UserAccount />} />
+              <Route path="user" element={<UserSpace />}>
+                <Route path=":userSubPage" element={<UserSpace />} />
+              </Route>
             </Route>
+
             <Route
               element={
                 <Suspense fallback={<Loader />}>

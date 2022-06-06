@@ -4,9 +4,11 @@ import tavern from '../assets/images/tavern.jpg';
 import ButtonLink from '../components/ui/ButtonLink';
 import Card from '../components/ui/Card';
 import Section from '../components/layout/Section';
+import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
   const imageRef = useRef<HTMLImageElement>(null);
+  const navigate = useNavigate();
   return (
     <>
       <Section className="px-40 py-24">
@@ -26,7 +28,11 @@ const Home = () => {
               Adventure Forge your new companion to create you next roleplaying
               game adventure
             </p>
-            <ButtonLink value="Discover" className="mt-10" />
+            <ButtonLink
+              value="Start your Adventure"
+              className="mt-10"
+              to="user"
+            />
           </div>
         </div>
       </Section>
