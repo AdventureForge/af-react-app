@@ -44,18 +44,18 @@ export interface Collection extends BaseEntity {
 }
 
 export interface Book extends BaseEntity {
-  title: string;
+  title?: string;
   subtitle?: string;
   cover?: string;
   description?: string;
   language?: string;
-  isbn: string;
-  authors: Author[];
-  collections: Collection;
-  category: Category;
-  publishers?: Publisher;
-  rolePlayingGames?: RolePlayingGame;
-  editions?: Edition;
+  isbn?: string;
+  authorsUuid?: string[];
+  collectionUuid?: string;
+  category?: Category;
+  publisherUuid?: string;
+  rolePlayingGameUuid?: string;
+  editionUuid?: string;
 }
 
 export interface Author extends BaseEntity {
