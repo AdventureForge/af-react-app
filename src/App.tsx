@@ -38,7 +38,7 @@ const App = () => {
             <Route
               element={
                 <Suspense fallback={<Loader />}>
-                  <ProtectedRoute allowedRoles={['USER, ADMIN']} />
+                  <ProtectedRoute allowedRoles={['USER', 'ADMIN']} />
                 </Suspense>
               }
             >
