@@ -1,7 +1,8 @@
 import { useMemo, useState } from 'react';
 import { Column } from 'react-table';
 import { UserPageContentEnum } from '../../pages/UserSpace';
-import { BaseEntity, PageInfo } from '../../types/domain';
+import { BaseEntity, Campaign, PageInfo } from '../../types/domain';
+import CampaignForm from '../forms/CampaignForm';
 import Section from '../layout/Section';
 import Table from '../table/Table';
 import Button from '../ui/Button';
@@ -39,7 +40,16 @@ const UserPageContent: React.FC<UserContentProps> = (props) => {
   const getForm = () => {
     switch (props.pageType) {
       case UserPageContentEnum.CAMPAIGNS:
-        return <p>Campaign page content</p>;
+        return (
+          <CampaignForm
+            mode={modalMode}
+            onConfirm={
+              modalMode === ModalMode.CREATE ? props.onCreate : props.onUpdate
+            }
+            onCancel={props.onCloseModal}
+            dataToUpdate={dataToUpdate as Campaign}
+          />
+        );
       case UserPageContentEnum.ADVENTURES:
         return <p>Adventures page content</p>;
 
@@ -86,7 +96,7 @@ const UserPageContent: React.FC<UserContentProps> = (props) => {
           No {props.title} found!{' '}
         </p>
       )}
-      {props.isDataReturned && props.dataFromDB.length > 1000 && (
+      {props.isDataReturned && props.dataFromDB.length > 0 && (
         <Table
           data={data}
           columns={columns}

@@ -159,7 +159,6 @@ const Table: React.FC<TableProps> = ({
         {allColumns
           .filter((column) => column.id !== 'selection' && column.id !== 'edit')
           .map((column) => {
-            console.log(column);
             return (
               <div key={column.id} className="mr-4 text-sm">
                 <label>

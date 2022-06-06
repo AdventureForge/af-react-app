@@ -63,6 +63,25 @@ export interface Author extends BaseEntity {
   lastname: string;
 }
 
+export interface Campaign extends BaseEntity {
+  title?: string;
+  description?: string;
+  adventuresUuid?: string[];
+}
+
+export interface Adventure extends BaseEntity {
+  title?: string;
+  description?: string;
+  campaignUuid?: string;
+  adventuresUuid?: string[];
+  scenesUuid?: string[];
+  appendicesUuid?: string[];
+  nextAdventuresUuid: string[];
+  previousAdventuresUuid: string[];
+  npcsUuid: string[];
+  placesUuid: string[];
+}
+
 export interface PageInfo {
   firstElement: boolean;
   lastElement: boolean;
