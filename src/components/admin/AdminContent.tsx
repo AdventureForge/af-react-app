@@ -8,7 +8,11 @@ import {
   Publisher,
   RolePlayingGame,
   Collection,
+  Author,
+  Book,
 } from '../../types/domain';
+import AuthorForm from '../forms/AuthorForm';
+import BookForm from '../forms/BookForm';
 import CollectionForm from '../forms/CollectionForm';
 import EditionForm from '../forms/EditionForm';
 import PublisherForm from '../forms/PublisherForm';
@@ -95,6 +99,30 @@ const AdminContent: React.FC<AdminContentProps> = (props) => {
           />
         );
 
+      case AdminPageContentEnum.AUTHORS:
+        return (
+          <AuthorForm
+            mode={modalMode}
+            onConfirm={
+              modalMode === ModalMode.CREATE ? props.onCreate : props.onUpdate
+            }
+            onCancel={props.onCloseModal}
+            dataToUpdate={dataToUpdate as Author}
+          />
+        );
+
+      case AdminPageContentEnum.BOOKS:
+        return (
+          <BookForm
+            mode={modalMode}
+            onConfirm={
+              modalMode === ModalMode.CREATE ? props.onCreate : props.onUpdate
+            }
+            onCancel={props.onCloseModal}
+            dataToUpdate={dataToUpdate as Book}
+          />
+        );
+
       default:
         props.onCloseModal();
         break;
@@ -109,8 +137,6 @@ const AdminContent: React.FC<AdminContentProps> = (props) => {
   const openModalUpdateHandler = (data: object) => {
     setModalMode(ModalMode.UPDATE);
     setDataToUpdate(data);
-    console.log(data);
-
     props.onOpenModal();
   };
 

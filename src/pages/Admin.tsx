@@ -9,10 +9,14 @@ import {
   Publisher,
   RolePlayingGame,
   Collection,
+  Author,
+  Book,
 } from '../types/domain';
 import Loader from '../components/ui/Loader';
 import AdminContent from '../components/admin/AdminContent';
 import {
+  authorHeaders,
+  bookHeaders,
   collectionHeaders,
   editionHeaders,
   publisherHeaders,
@@ -81,6 +85,8 @@ const Admin = () => {
   const [rpgData, setRpgData] = useState<RolePlayingGame[]>([]);
   const [editionData, setEditionData] = useState<Edition[]>([]);
   const [collectionData, setCollectionData] = useState<Collection[]>([]);
+  const [authorData, setAuthorData] = useState<Author[]>([]);
+  const [bookData, setBookData] = useState<Book[]>([]);
   const [pageInfo, setPageInfo] = useState<PageInfo | null>(null);
   const [pageNumber, setPageNumber] = useState(0);
   const [pageSize, setPageSize] = useState(20);
@@ -124,6 +130,12 @@ const Admin = () => {
 
             adminSubPage === AdminPageContentEnum.COLLECTIONS &&
               setCollectionData((_) => response.data.data);
+
+            adminSubPage === AdminPageContentEnum.AUTHORS &&
+              setAuthorData((_) => response.data.data);
+
+            adminSubPage === AdminPageContentEnum.BOOKS &&
+              setBookData((_) => response.data.data);
 
             setPageInfo(response.data.pageInfo);
           }
@@ -171,7 +183,6 @@ const Admin = () => {
     !!axiosInstance.current &&
       axiosInstance.current
         .put(`${apiUrl}/${t.uuid}`, t)
-        .then((response) => console.log(response))
         .then(() => fetchData())
         .catch((error) => {
           console.log(error.response.data);
@@ -326,13 +337,13 @@ const Admin = () => {
           adminPages.get(AdminPageContentEnum.AUTHORS)?.title ?? 'Missing Title'
         }
         pageInfo={pageInfo ?? undefined}
-        pageType={AdminPageContentEnum.ADVENTURES}
+        pageType={AdminPageContentEnum.AUTHORS}
         onCloseModal={closeModalHandler}
         onOpenModal={openModalHandler}
         modalDisplayed={isModalDisplayed}
         isDataReturned={isDataReturned}
-        dataFromDB={rpgData}
-        headers={rolePlayingGameHeaders}
+        dataFromDB={authorData}
+        headers={authorHeaders}
         onRowSelect={rowSelectedHandler}
         onDelete={deleteDataHanlder}
         onUpdate={updateDataHandler}
@@ -355,8 +366,8 @@ const Admin = () => {
         onOpenModal={openModalHandler}
         modalDisplayed={isModalDisplayed}
         isDataReturned={isDataReturned}
-        dataFromDB={rpgData}
-        headers={rolePlayingGameHeaders}
+        dataFromDB={bookData}
+        headers={bookHeaders}
         onRowSelect={rowSelectedHandler}
         onDelete={deleteDataHanlder}
         onUpdate={updateDataHandler}
