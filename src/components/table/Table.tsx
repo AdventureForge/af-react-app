@@ -6,13 +6,15 @@ import {
   PencilAltIcon,
   TrashIcon,
 } from '@heroicons/react/outline';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import {
   useTable,
   useSortBy,
   Column,
   usePagination,
   useRowSelect,
+  useBlockLayout,
+  useResizeColumns,
 } from 'react-table';
 import { PageInfo, Publisher } from '../../types/domain';
 import IndeterminateCheckbox from './IndeterminateCheckbox';
@@ -39,10 +41,20 @@ const Table: React.FC<TableProps> = ({
   onPageNumberChange,
   onPageSizeChange,
 }) => {
+  const defaultColumn = useMemo(
+    () => ({
+      minWidth: 30,
+      width: 100,
+      maxWidth: 400,
+    }),
+    []
+  );
+
   const instance = useTable(
     {
       columns,
       data,
+      defaultColumn,
       manualPagination: true,
       pageCount: pageInfo?.totalPages,
       initialState: {
@@ -53,6 +65,8 @@ const Table: React.FC<TableProps> = ({
     useSortBy,
     usePagination,
     useRowSelect,
+    useBlockLayout,
+    useResizeColumns,
     (hooks) => {
       hooks.visibleColumns.push((columns) => [
         {
@@ -73,6 +87,7 @@ const Table: React.FC<TableProps> = ({
               />
             </div>
           ),
+          width: 50,
         },
         {
           id: 'edit',
@@ -83,6 +98,7 @@ const Table: React.FC<TableProps> = ({
               onClick={() => editDataHandler(table.data[table.row.id])}
             />
           ),
+          width: 60,
         },
         ...columns,
       ]);
@@ -95,6 +111,8 @@ const Table: React.FC<TableProps> = ({
     headerGroups,
     prepareRow,
     page,
+    allColumns,
+    getToggleHideAllColumnsProps,
     canPreviousPage,
     canNextPage,
     pageOptions,
@@ -104,6 +122,7 @@ const Table: React.FC<TableProps> = ({
     previousPage,
     setPageSize,
     selectedFlatRows,
+    resetResizing,
     state: { pageIndex, pageSize },
   } = instance;
 
@@ -128,7 +147,30 @@ const Table: React.FC<TableProps> = ({
   }, [pageSize]);
 
   return (
-    <div className="mt-10">
+    <>
+      <div className="flex mb-4 border-y border-y-violet-500 py-4 mt-10 ">
+        <div className="mr-4 text-sm">
+          <IndeterminateCheckbox
+            name="togglecolumns"
+            {...getToggleHideAllColumnsProps()}
+          />{' '}
+          Toggle All
+        </div>
+        {allColumns
+          .filter((column) => column.id !== 'selection' && column.id !== 'edit')
+          .map((column) => {
+            console.log(column);
+            return (
+              <div key={column.id} className="mr-4 text-sm">
+                <label>
+                  <input type="checkbox" {...column.getToggleHiddenProps()} />{' '}
+                  {column.id}
+                </label>
+              </div>
+            );
+          })}
+        <br />
+      </div>
       <div className="flex items-center align-top mb-4">
         <TablePagination
           canNextPage={canNextPage}
@@ -146,67 +188,89 @@ const Table: React.FC<TableProps> = ({
           className="w-6 ml-6 inline-block hover:text-red-400 cursor-pointer"
           onClick={onDelete}
         />
+        <button onClick={resetResizing} className="ml-4 hover:text-red-500">
+          reset resizing
+        </button>
       </div>
-      <table {...getTableProps()} className="w-full shadow-lg rounded">
-        <thead className="border-white border-solid bg-slate-800">
-          {headerGroups.map((headerGroup) => (
-            <tr {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map((column) => (
-                <th
-                  {...column.getHeaderProps(column.getSortByToggleProps())}
-                  className="p-4 text-left font-bold"
-                >
-                  {column.render('Header')}
-                  <span>
-                    {column.isSorted ? (
-                      column.isSortedDesc ? (
-                        <ChevronDownIcon className="ml-4 w-4 inline-block" />
+      <div className="overflow-x-auto">
+        <table {...getTableProps()} className="w-full shadow-lg rounded">
+          <thead className="border-white border-solid bg-slate-800">
+            {headerGroups.map((headerGroup) => (
+              <tr {...headerGroup.getHeaderGroupProps()}>
+                {headerGroup.headers.map((column) => (
+                  <div
+                    {...column.getHeaderProps(column.getSortByToggleProps())}
+                    className="p-4 text-left font-bold th"
+                  >
+                    {column.render('Header')}
+                    <span>
+                      {column.isSorted ? (
+                        column.isSortedDesc ? (
+                          <ChevronDownIcon className="ml-4 w-4 inline-block" />
+                        ) : (
+                          <ChevronUpIcon className="ml-4 w-4 inline-block" />
+                        )
                       ) : (
-                        <ChevronUpIcon className="ml-4 w-4 inline-block" />
-                      )
-                    ) : (
-                      ''
-                    )}
-                  </span>
-                </th>
-              ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody {...getTableBodyProps()} className="border-white border-solid">
-          {page.map((row, i) => {
-            prepareRow(row);
-            return (
-              <tr {...row.getRowProps()} className="border-white border-solid">
-                {row.cells.map((cell) => {
-                  return (
-                    <td
-                      {...cell.getCellProps()}
-                      className={`${i % 2 === 0 ? 'bg-slate-700' : ''} px-4`}
-                    >
-                      {cell.render('Cell')}
-                    </td>
-                  );
-                })}
+                        ''
+                      )}
+                    </span>
+                    <div
+                      {...column.getResizerProps()}
+                      className={`inline-block bg-slate-900 w-1 h-full absolute right-0 top-0 translate-x-1/2 z-10 touch-none ${
+                        column.isResizing ? 'bg-red-500' : ''
+                      }`}
+                    />
+                  </div>
+                ))}
               </tr>
-            );
-          })}
-        </tbody>
-      </table>
-      <TablePagination
-        canNextPage={canNextPage}
-        canPreviousPage={canPreviousPage}
-        gotoPage={gotoPage}
-        nextPage={nextPage}
-        pageCount={pageCount}
-        pageIndex={pageIndex}
-        pageOptions={pageOptions}
-        pageSize={pageSize}
-        previousPage={previousPage}
-        setPageSize={setPageSize}
-        className="mt-4"
-      />
-    </div>
+            ))}
+          </thead>
+          <tbody {...getTableBodyProps()} className="border-white border-solid">
+            {page.map((row, i) => {
+              prepareRow(row);
+              return (
+                <tr
+                  {...row.getRowProps()}
+                  className="border-white border-solid"
+                >
+                  {row.cells.map((cell) => {
+                    return (
+                      <td
+                        {...cell.getCellProps()}
+                        className={`${i % 2 === 0 ? 'bg-slate-700' : ''} px-4`}
+                      >
+                        {cell.render('Cell')}
+                      </td>
+                    );
+                  })}
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+      <div className="flex items-center align-top mt-4">
+        <TablePagination
+          canNextPage={canNextPage}
+          canPreviousPage={canPreviousPage}
+          gotoPage={gotoPage}
+          nextPage={nextPage}
+          pageCount={pageCount}
+          pageIndex={pageIndex}
+          pageOptions={pageOptions}
+          pageSize={pageSize}
+          previousPage={previousPage}
+          setPageSize={setPageSize}
+        />
+        <TrashIcon
+          className="w-6 ml-6 inline-block hover:text-red-400 cursor-pointer"
+          onClick={onDelete}
+        />
+        <button onClick={resetResizing} className="ml-4 hover:text-red-500">
+          reset resizing
+        </button>
+      </div>
+    </>
   );
 };
 
