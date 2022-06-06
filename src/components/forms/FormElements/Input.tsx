@@ -8,7 +8,7 @@ interface InputProps<T> {
   register: UseFormRegister<T>;
   required: boolean;
   pattern?: RegExp;
-  errors?: FieldError | undefined;
+  errors?: FieldError;
   errorMessage?: string;
   type?: React.HTMLInputTypeAttribute;
   placeholder?: string;

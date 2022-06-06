@@ -68,7 +68,7 @@ const Table: React.FC<TableProps> = ({
     useBlockLayout,
     useResizeColumns,
     (hooks) => {
-      hooks.visibleColumns.push((columns) => [
+      hooks.visibleColumns.push((cols) => [
         {
           id: 'selection',
           Header: ({ getToggleAllPageRowsSelectedProps }) => (
@@ -100,7 +100,7 @@ const Table: React.FC<TableProps> = ({
           ),
           width: 60,
         },
-        ...columns,
+        ...cols,
       ]);
     }
   );
@@ -126,8 +126,8 @@ const Table: React.FC<TableProps> = ({
     state: { pageIndex, pageSize },
   } = instance;
 
-  const editDataHandler = (data: object) => {
-    onEdit(data);
+  const editDataHandler = (dataToEdit: object) => {
+    onEdit(dataToEdit);
   };
 
   useEffect(() => {
@@ -204,15 +204,12 @@ const Table: React.FC<TableProps> = ({
                   >
                     {column.render('Header')}
                     <span>
-                      {column.isSorted ? (
-                        column.isSortedDesc ? (
+                      {column.isSorted &&
+                        (column.isSortedDesc ? (
                           <ChevronDownIcon className="ml-4 w-4 inline-block" />
                         ) : (
                           <ChevronUpIcon className="ml-4 w-4 inline-block" />
-                        )
-                      ) : (
-                        ''
-                      )}
+                        ))}
                     </span>
                     <div
                       {...column.getResizerProps()}

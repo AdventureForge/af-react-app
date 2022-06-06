@@ -11,7 +11,7 @@ interface SelectProps<T> {
   required: boolean;
   htmlFor: string;
   pattern?: RegExp;
-  errors?: FieldError | undefined;
+  errors?: FieldError;
   errorMessage?: string;
   type?: React.HTMLInputTypeAttribute;
   placeholder?: string;

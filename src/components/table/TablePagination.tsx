@@ -87,9 +87,9 @@ const TablePagination: React.FC<TablePaginationProps> = ({
             setPageSize(Number(e.target.value));
           }}
         >
-          {[20, 30, 40, 100].map((pageSize) => (
-            <option key={pageSize} value={pageSize} className="bg-slate-900">
-              size {pageSize}
+          {[20, 30, 40, 100].map((size) => (
+            <option key={size} value={size} className="bg-slate-900">
+              size {size}
             </option>
           ))}
         </select>

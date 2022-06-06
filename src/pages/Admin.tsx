@@ -204,7 +204,7 @@ const Admin = () => {
   };
 
   const rowSelectedHandler = (rows: (string | undefined)[]) => {
-    setRowsSelected((prev) => rows);
+    setRowsSelected((_) => rows);
   };
 
   const renderPage = () => {
