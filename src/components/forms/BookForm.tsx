@@ -116,7 +116,7 @@ const BookForm: React.FC<Props> = (props) => {
   };
 
   const onAuthorChange = (authorsCheckbox: Author[]) => {
-    setAuthorsSelected((prev) => authorsCheckbox);
+    setAuthorsSelected((_) => authorsCheckbox);
   };
 
   const onSubmit: SubmitHandler<IBookForm> = (data) => {

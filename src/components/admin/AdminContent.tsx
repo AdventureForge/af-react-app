@@ -134,9 +134,9 @@ const AdminContent: React.FC<AdminContentProps> = (props) => {
     props.onOpenModal();
   };
 
-  const openModalUpdateHandler = (dataToUpdate: object) => {
+  const openModalUpdateHandler = (updatedData: object) => {
     setModalMode(ModalMode.UPDATE);
-    setDataToUpdate(dataToUpdate);
+    setDataToUpdate(updatedData);
     props.onOpenModal();
   };
 
