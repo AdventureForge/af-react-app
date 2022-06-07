@@ -1,0 +1,18 @@
+version: '3.2'
+services:
+  my-react-app:
+    image: morganlmd/adventureforge-reactui:latest
+    container_name: adventureforge-ui
+    ports:
+      - '3000:80'
+    environment:
+      API_URL: ${API_URL}
+      KC_URL: ${KC_URL}
+      KC_REALM: ${KC_REALM}
+      KC_CLIENTID: ${KC_CLIENTID}
+
+  watchtower:
+    image: containrrr/watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: --interval 30 adventureforge-ui
