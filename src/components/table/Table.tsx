@@ -148,7 +148,7 @@ const Table: React.FC<TableProps> = ({
 
   return (
     <>
-      <div className="flex mb-4 border-y border-y-violet-500 py-4 mt-10 ">
+      <div className="flex flex-wrap gap-3 mb-4 border-y border-y-violet-500 py-4 mt-10 ">
         <div className="mr-4 text-sm">
           <IndeterminateCheckbox
             name="togglecolumns"
