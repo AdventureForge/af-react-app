@@ -4,11 +4,9 @@ import tavern from '../assets/images/tavern.jpg';
 import ButtonLink from '../components/ui/ButtonLink';
 import Card from '../components/ui/Card';
 import Section from '../components/layout/Section';
-import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
   const imageRef = useRef<HTMLImageElement>(null);
-  const navigate = useNavigate();
   return (
     <>
       <Section className="px-40 py-24">
