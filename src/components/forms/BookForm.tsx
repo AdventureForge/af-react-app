@@ -207,7 +207,7 @@ const BookForm: React.FC<Props> = (props) => {
           register={register}
           required={true}
           pattern={isbnValidationPattern}
-          errors={errors.cover}
+          errors={errors.isbn}
           errorMessage="This is not a valid ISBN"
           defaultValue={
             props.mode === ModalMode.UPDATE
