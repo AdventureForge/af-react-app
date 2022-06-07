@@ -5,7 +5,7 @@ services:
     ports:
       - '3000:80'
     environment:
-      - 'API_URL=production.example.com'
-      - 'KC_URL=http://localhost:8080/auth'
-      - 'KC_REALM=adventureforge-api'
-      - 'KC_CLIENTID=adventureforge-ui'
+      API_URL: ${API_URL}
+      KC_URL: ${KC_URL}
+      KC_REALM: ${KC_REALM}
+      KC_CLIENTID: ${KC_CLIENTID}
